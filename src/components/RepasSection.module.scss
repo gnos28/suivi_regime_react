@@ -1,0 +1,58 @@
+.repasSectionContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  //   margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.repasSectionTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  background-color: #c3e0ff;
+  color: #000000;
+}
+
+.repasSectionContent {
+  white-space: pre-wrap;
+  font-size: 1rem;
+}
+
+.nutritionTotalsPeriod {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+.repasSectionContent {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 0.5rem;
+  width: 100vw;
+  //   max-width: 90vw;
+}
+
+.addButton {
+  //   display: inline-block;*
+  align-self: center;
+  width: calc(100% - 3rem);
+  max-width: 90vw;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  user-select: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.addButton:hover {
+  background-color: #0056b3;
+}

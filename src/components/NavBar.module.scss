@@ -1,0 +1,20 @@
+.navBarContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #eee;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 1rem;
+
+  & > h1 {
+    color: #333333;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+}
