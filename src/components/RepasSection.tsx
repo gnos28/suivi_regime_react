@@ -87,12 +87,12 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
 
   const imageSrc =
     dayTimeCol === "matin"
-      ? "/public/matin.webp"
+      ? "/matin.webp"
       : dayTimeCol === "midi"
-      ? "/public/midi.webp"
+      ? "/midi.webp"
       : dayTimeCol === "goûter"
-      ? "/public/aprem.webp"
-      : "/public/soir.webp";
+      ? "/aprem.webp"
+      : "/soir.webp";
 
   return (
     <div className={styles.repasSectionContainer}>
