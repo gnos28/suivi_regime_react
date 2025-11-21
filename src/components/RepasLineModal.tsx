@@ -54,11 +54,16 @@ const RepasLineModal = ({
 
   useEffect(() => {
     const computeSuggestions = () => {
+      if (editedContent.trim().length === 0) {
+        setSuggestions([]);
+        return;
+      }
+
       const distances: { line: string; distance: number }[] = [
         ...new Set(
           database
             .map((item) => item.aliment.toString())
-            .filter((name) => name.length > 0)
+            .filter((name) => name.length > 0 && name !== "-")
         ),
       ]
         .map((name) => {
@@ -95,30 +100,38 @@ const RepasLineModal = ({
       }}
     >
       <div
-        className={modalStyles.modalContainer}
+        className={[modalStyles.modalContainer, styles.modalContainer].join(
+          " "
+        )}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.suggestionsContainer}>
           <h2>Mes habitudes</h2>
-          {mostUsedAliments.slice(0, 5).map((suggestion, index) => (
-            <div
-              key={index}
-              className={styles.suggestionItem}
-              onClick={() => setEditedContent(suggestion)}
-            >
-              {suggestion}
-            </div>
-          ))}
+          <div>
+            {mostUsedAliments.slice(0, 7).map((suggestion, index) => (
+              <div
+                key={index}
+                className={styles.suggestionItem}
+                onClick={() => setEditedContent(suggestion)}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={styles.suggestionsContainer}>
           <h2>Suggestions</h2>
-          {suggestions.slice(0, 5).map((suggestion, index) => (
-            <div
-              key={index}
-              className={styles.suggestionItem}
-              onClick={() => setEditedContent(suggestion)}
-            >
-              {suggestion}
-            </div>
-          ))}
+          <div>
+            {suggestions.slice(0, 7).map((suggestion, index) => (
+              <div
+                key={index}
+                className={styles.suggestionItem}
+                onClick={() => setEditedContent(suggestion)}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
         </div>
         <div className={styles.editContainer}>
           <textarea
