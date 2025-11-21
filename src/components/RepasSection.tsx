@@ -94,6 +94,18 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
       ? "/aprem.webp"
       : "/soir.webp";
 
+  const splitText = (content ?? "")
+    .toString()
+    .split("\n")
+    .filter((textLine) => textLine.trim() !== "");
+
+  const hasNotInDatabaseItems = splitText.some(
+    (line) =>
+      database.some(
+        (item) => item.aliment.toString().toLowerCase() === line.toLowerCase()
+      ) === false
+  );
+
   return (
     <div className={styles.repasSectionContainer}>
       <div
@@ -102,6 +114,11 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
       >
         <img src={imageSrc} alt="" className={styles.repasSectionImage} />
         <h3>{title}</h3>
+        {hasNotInDatabaseItems === true && (
+          <div className={styles.notInDatabase}>
+            <img src="/gemini256.webp" width={24} height={24} />
+          </div>
+        )}
 
         <div className={styles.nutritionTotalsPeriod}>
           <AverageBar
@@ -144,7 +161,7 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
       </div>
       {showRepas === true && (
         <div className={styles.repasSectionContent}>
-          <RepasLines text={content} dayTimeCol={dayTimeCol} />
+          <RepasLines splitText={splitText} dayTimeCol={dayTimeCol} />
           <div
             className={[buttonStyles.btnGrad, styles.addButton].join(" ")}
             onClick={() => setShowAddModal(true)}

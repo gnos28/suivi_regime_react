@@ -15,8 +15,10 @@
 
   & > h1 {
     color: #333333;
-    font-size: 1.5rem;
+    font-size: 30px;
     margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
   }
 }
 
@@ -28,6 +30,20 @@
   width: 100%;
   height: 120px;
   background-color: #eeeeeeb3;
+}
+
+.geminiIconContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-top: 4px;
+}
+
+.forkAndKnife,
+.geminiIcon {
+  position: absolute;
 }
 
 .rotatingIcon {

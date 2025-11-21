@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./EditRepasLine.module.scss";
 import buttonStyles from "../styles/button.module.scss";
 import RepasLineModal from "./RepasLineModal";
+import { useSuiviRegime } from "../hooks/useSuiviRegime";
 
 type EditRepasLineProps = {
   line: string;
@@ -16,7 +17,12 @@ const EditRepasLine = ({
   handleRemoveLine,
   dayTimeCol,
 }: EditRepasLineProps) => {
+  const { database } = useSuiviRegime();
   const [editing, setEditing] = useState(false);
+
+  const isInDatabase = database.some(
+    (item) => item.aliment.toString().toLowerCase() === line.toLowerCase()
+  );
 
   const handleValidate = (content: string) => {
     setEditing(false);
@@ -47,6 +53,11 @@ const EditRepasLine = ({
         <span>✏️</span>
       </div>
       <span className={styles.repasLine}>{line}</span>
+      {isInDatabase === false && (
+        <div className={styles.notInDatabase}>
+          <img src="/gemini256.webp" width={24} height={24} />
+        </div>
+      )}
     </div>
   );
 };
