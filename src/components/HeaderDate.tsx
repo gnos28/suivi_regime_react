@@ -24,7 +24,14 @@ type Carence = {
 };
 
 const HeaderDate = () => {
-  const { database, targets, selectedDay, selectedSuiviDay } = useSuiviRegime();
+  const {
+    database,
+    targets,
+    selectedDay,
+    selectedSuiviDay,
+    goToPreviousDay,
+    goToNextDay,
+  } = useSuiviRegime();
   const [carences, setCarences] = useState<Carence[]>([]);
   const [donutGroupIndex, setDonutGroupIndex] = useState(0);
 
@@ -101,6 +108,24 @@ const HeaderDate = () => {
             day: "numeric",
           })
           .toUpperCase()}
+        <div
+          className={[styles.changeDayIcon, styles.previousDay].join(" ")}
+          onClick={goToPreviousDay}
+        >
+          <img src="/previous.svg" alt="previous day" width="20" height="20" />
+        </div>
+        <div
+          className={[styles.changeDayIcon, styles.nextDay].join(" ")}
+          onClick={goToNextDay}
+        >
+          <img
+            src="/previous.svg"
+            alt="previous day"
+            width="20"
+            height="20"
+            className={styles.rotate180}
+          />
+        </div>
       </span>
       <div className={styles.nutritionTotals} onClick={goToNextDonutGroup}>
         {donutGroups[donutGroupIndex].map((donutItem) => (

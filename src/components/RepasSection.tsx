@@ -60,22 +60,22 @@ const AverageBar = ({
 
 type RepasSectionProps = {
   title: string;
-  content: string | number | undefined;
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
 };
 
-const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
+const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
   const [showRepas, setShowRepas] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const { database, suiviDays, handleAddLine } = useSuiviRegime();
+  const { database, suiviDays, handleAddLine, selectedSuiviDay } =
+    useSuiviRegime();
 
   const hideModal = () => {
     setShowAddModal(false);
   };
 
   const calcColumnTotalPeriod = calcColumnTotal({
-    periods: [content?.toString() ?? ""],
+    periods: [selectedSuiviDay?.[dayTimeCol]?.toString() ?? ""],
     database: database,
   });
 
@@ -94,7 +94,7 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
       ? "/aprem.webp"
       : "/soir.webp";
 
-  const splitText = (content ?? "")
+  const splitText = (selectedSuiviDay?.[dayTimeCol] ?? "")
     .toString()
     .split("\n")
     .filter((textLine) => textLine.trim() !== "");
@@ -138,7 +138,7 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
             colorRemaining="rgba(167, 178, 255, 0.2)"
           />
           <AverageBar
-            columnName="Glucides"
+            columnName="Lipides"
             calcColumnTotalPeriod={calcColumnTotalPeriod}
             calcColumnAveragePeriod={calcColumnAveragePeriod}
             unit="g"
@@ -146,7 +146,7 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
             colorRemaining="rgba(255, 233, 161, 0.2)"
           />
           <AverageBar
-            columnName="Lipides"
+            columnName="Glucides"
             calcColumnTotalPeriod={calcColumnTotalPeriod}
             calcColumnAveragePeriod={calcColumnAveragePeriod}
             unit="g"
@@ -173,7 +173,11 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
               dayTimeCol={dayTimeCol}
               content={""}
               setEditing={setShowAddModal}
-              handleValidate={handleAddLine({ content, dayTimeCol, hideModal })}
+              handleValidate={handleAddLine({
+                content: selectedSuiviDay?.[dayTimeCol],
+                dayTimeCol,
+                hideModal,
+              })}
             />
           )}
         </div>

@@ -147,25 +147,25 @@ export const calcDonutGroups = ({
         ],
       },
       {
-        name: "Glucides",
+        name: "Lipides",
         colorValue: "rgba(255, 217, 45, 0.35)",
         colorTarget: "rgba(255, 233, 161, 0.2)",
-        value: calcColumnTotalDay("Glucides"),
-        target: targetGlucides,
-        textLines: [
-          "Glucides",
-          `${calcColumnTotalDay("Glucides").toFixed(1)} / ${targetGlucides} g`,
-        ],
-      },
-      {
-        name: "Lipides",
-        colorValue: "rgba(235, 54, 54, 0.2)",
-        colorTarget: "rgba(255, 192, 192, 0.2)",
         value: calcColumnTotalDay("Lipides"),
         target: targetLipides,
         textLines: [
           "Lipides",
           `${calcColumnTotalDay("Lipides").toFixed(1)} / ${targetLipides} g`,
+        ],
+      },
+      {
+        name: "Glucides",
+        colorValue: "rgba(235, 54, 54, 0.2)",
+        colorTarget: "rgba(255, 192, 192, 0.2)",
+        value: calcColumnTotalDay("Glucides"),
+        target: targetGlucides,
+        textLines: [
+          "Glucides",
+          `${calcColumnTotalDay("Glucides").toFixed(1)} / ${targetGlucides} g`,
         ],
       },
     ],

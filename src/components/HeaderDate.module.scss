@@ -29,6 +29,36 @@
   background-clip: text;
   color: transparent;
   text-shadow: rgba(255, 255, 255, 0.3) 0px 3px 3px;
+  position: relative;
+}
+
+.changeDayIcon {
+  width: 24px;
+  height: 32px;
+  position: absolute;
+  // top: 0;
+  top: 1px;
+  cursor: pointer;
+  filter: opacity(0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.3s ease;
+}
+
+.changeDayIcon:hover {
+  filter: opacity(0.5);
+}
+
+.previousDay {
+  left: -1.3rem;
+}
+
+.nextDay {
+  right: -1.3rem;
+}
+.rotate180 {
+  transform: rotate(180deg);
 }
 
 .nutritionTotals {

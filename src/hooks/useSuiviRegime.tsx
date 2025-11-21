@@ -22,7 +22,7 @@ export const useSuiviRegime = () => {
   const { targets, setTargets } = useContext(TargetsContext);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedDay] = useState<Date>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const [selectedSuiviDay, setSelectedSuiviDay] = useState<
     Record<SuiviColName, string | number> | undefined
   >(undefined);
@@ -164,6 +164,22 @@ export const useSuiviRegime = () => {
       });
     };
 
+  const goToPreviousDay = () => {
+    setSelectedDay((prevDay) => {
+      const newDate = new Date(prevDay);
+      newDate.setDate(newDate.getDate() - 1);
+      return newDate;
+    });
+  };
+
+  const goToNextDay = () => {
+    setSelectedDay((prevDay) => {
+      const newDate = new Date(prevDay);
+      newDate.setDate(newDate.getDate() + 1);
+      return newDate;
+    });
+  };
+
   useEffect(() => {
     const suiviToday = suiviDays.find(
       (suiviDay) =>
@@ -184,5 +200,7 @@ export const useSuiviRegime = () => {
     handleEditLine,
     handleRemoveLine,
     isLoading,
+    goToPreviousDay,
+    goToNextDay,
   };
 };

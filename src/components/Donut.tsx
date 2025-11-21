@@ -29,7 +29,7 @@ const Donut = ({
     labels: ["", ""],
     datasets: [
       {
-        data: [value, target - value],
+        data: [value, target - value > 0 ? target - value : 0],
         backgroundColor: [colorValue, colorTarget],
         borderWidth: 0,
       },
