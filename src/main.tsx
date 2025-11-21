@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import { DatabaseContextProvider } from "./contexts/databaseContext.tsx";
 import { SuiviDaysContextProvider } from "./contexts/suiviDaysContext.tsx";
 import { TargetsContextProvider } from "./contexts/targetsContext.tsx";
+import { SelectedDayContextProvider } from "./contexts/selectedDayContext.tsx";
 import { PasswordContextProvider } from "./contexts/passwordContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")!).render(
     <TargetsContextProvider>
       <SuiviDaysContextProvider>
         <DatabaseContextProvider>
-          <App />
+          <SelectedDayContextProvider>
+            <App />
+          </SelectedDayContextProvider>
         </DatabaseContextProvider>
       </SuiviDaysContextProvider>
     </TargetsContextProvider>

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
 import { globales } from "../types/globales";
-import { calcColumnTotal } from "../utils/calcColumnTotal";
 import Donut from "./Donut";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
 import { calcDonutGroups } from "../utils/calcDonutGroups";

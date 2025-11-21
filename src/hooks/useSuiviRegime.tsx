@@ -1,12 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import SuiviDaysContext from "../contexts/suiviDaysContext";
 import DatabaseContext from "../contexts/databaseContext";
 import TargetsContext from "../contexts/targetsContext";
 import { fetchDatabase } from "../api/fetchDatabase";
 import { fetchSuiviDays } from "../api/fetchSuiviDays";
 import { fetchTargets } from "../api/fetchTargets";
-import type { SuiviColName } from "../types/globales";
 import {
   convertDateToString,
   convertJsonStringToDate,
@@ -15,17 +13,22 @@ import {
 import { fetchUpdateSuiviDay } from "../api/fetchUpdateSuiviDay";
 import { fetchRefresh } from "../api/fetchRefresh";
 import PasswordContext from "../contexts/passwordContext";
+import SelectedDayContext from "../contexts/selectedDayContext";
 
 export const useSuiviRegime = () => {
   const { suiviDays, setSuiviDays } = useContext(SuiviDaysContext);
   const { database, setDatabase } = useContext(DatabaseContext);
   const { targets, setTargets } = useContext(TargetsContext);
+  const { selectedDay, setSelectedDay } = useContext(SelectedDayContext);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-  const [selectedSuiviDay, setSelectedSuiviDay] = useState<
-    Record<SuiviColName, string | number> | undefined
-  >(undefined);
+  const selectedSuiviDay = useMemo(() => {
+    return suiviDays.find(
+      (suiviDay) =>
+        convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
+        convertDateToString(selectedDay)
+    );
+  }, [suiviDays, selectedDay]);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setInvalidPassword, setPassword } = useContext(PasswordContext);
 
@@ -179,15 +182,6 @@ export const useSuiviRegime = () => {
       return newDate;
     });
   };
-
-  useEffect(() => {
-    const suiviToday = suiviDays.find(
-      (suiviDay) =>
-        convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
-        convertDateToString(selectedDay)
-    );
-    setSelectedSuiviDay(suiviToday);
-  }, [suiviDays, selectedDay]);
 
   return {
     suiviDays,
