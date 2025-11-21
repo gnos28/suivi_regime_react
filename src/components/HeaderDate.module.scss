@@ -13,6 +13,7 @@
   justify-content: center;
   padding: 0.5rem 0;
   color: #000000;
+  position: relative;
 }
 
 @font-face {
@@ -24,20 +25,24 @@
   font-size: 1.55rem;
   font-family: "LilitaOne";
   background-color: #4242428a;
+  width: 100%;
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: rgba(255, 255, 255, 0.3) 0px 3px 3px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .changeDayIcon {
   width: 24px;
-  height: 32px;
+  height: 48px;
   position: absolute;
   // top: 0;
-  top: 1px;
+  // top: 10px;
   cursor: pointer;
   filter: opacity(0.2);
   display: flex;
@@ -51,11 +56,11 @@
 }
 
 .previousDay {
-  left: -1.3rem;
+  left: 0;
 }
 
 .nextDay {
-  right: -1.3rem;
+  right: 0;
 }
 .rotate180 {
   transform: rotate(180deg);
