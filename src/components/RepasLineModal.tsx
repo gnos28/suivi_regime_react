@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./RepasLineModal.module.scss";
-import DatabaseContext from "../contexts/databaseContext";
+import modalStyles from "../styles/modal.module.scss";
 import levenshtein from "fast-levenshtein";
-import SuiviDaysContext from "../contexts/suiviDaysContext";
+import { useSuiviRegime } from "../hooks/useSuiviRegime";
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -18,8 +18,7 @@ const RepasLineModal = ({
   dayTimeCol,
 }: RepasLineModalProps) => {
   const [editedContent, setEditedContent] = useState(content);
-  const { database } = useContext(DatabaseContext);
-  const { suiviDays } = useContext(SuiviDaysContext);
+  const { database, suiviDays } = useSuiviRegime();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [mostUsedAliments, setMostUsedAliments] = useState<string[]>([]);
 
@@ -88,15 +87,15 @@ const RepasLineModal = ({
 
   return (
     <div
-      className={styles.modalBackground}
+      className={modalStyles.modalBackground}
       onClick={() => {
         console.log("close modal");
-        
+
         setEditing(false);
       }}
     >
       <div
-        className={styles.modalContainer}
+        className={modalStyles.modalContainer}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.suggestionsContainer}>

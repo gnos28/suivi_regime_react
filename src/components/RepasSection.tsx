@@ -1,19 +1,12 @@
 import styles from "./RepasSection.module.scss";
 import buttonStyles from "../styles/button.module.scss";
 import RepasLines from "./RepasLines";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { calcColumnTotal } from "../utils/calcColumnTotal";
-import DatabaseContext from "../contexts/databaseContext";
 import RepasLineModal from "./RepasLineModal";
-import SuiviDaysContext from "../contexts/suiviDaysContext";
-import {
-  convertDateToString,
-  convertJsonStringToDate,
-  removeAccents,
-} from "../utils/utils";
 import { calcColumnAverage } from "../utils/calcColumnAverage";
 import type { DatabaseColName } from "../types/globales";
-import { fetchUpdateSuiviDay } from "../api/fetchUpdateSuiviDay";
+import { useSuiviRegime } from "../hooks/useSuiviRegime";
 
 type AverageBarProps = {
   columnName: DatabaseColName;
@@ -74,9 +67,12 @@ type RepasSectionProps = {
 const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
   const [showRepas, setShowRepas] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const { database } = useContext(DatabaseContext);
-  const { suiviDays, setSuiviDays } = useContext(SuiviDaysContext);
-  const today = new Date();
+
+  const { database, suiviDays, handleAddLine } = useSuiviRegime();
+
+  const hideModal = () => {
+    setShowAddModal(false);
+  };
 
   const calcColumnTotalPeriod = calcColumnTotal({
     periods: [content?.toString() ?? ""],
@@ -88,36 +84,6 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
     database,
     suiviDays,
   });
-
-  const handleAddLine = async (newLine: string) => {
-    if (newLine.trim() === "") return;
-
-    const updatedSuiviDays = suiviDays.map((suiviDay) => {
-      if (
-        convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
-        convertDateToString(today)
-      ) {
-        const dayTimeMeals = (suiviDay[dayTimeCol] ?? "").toString();
-        return {
-          ...suiviDay,
-          [dayTimeCol]:
-            dayTimeMeals.trim() === ""
-              ? newLine
-              : dayTimeMeals + "\n" + newLine,
-        };
-      } else return suiviDay;
-    });
-
-    setSuiviDays(updatedSuiviDays);
-    setShowAddModal(false);
-    await fetchUpdateSuiviDay({
-      date: convertDateToString(today),
-      [removeAccents(dayTimeCol)]:
-        (content?.toString() ?? "").trim() !== ""
-          ? (content?.toString() ?? "") + "\n" + newLine
-          : newLine,
-    });
-  };
 
   const imageSrc =
     dayTimeCol === "matin"
@@ -190,7 +156,7 @@ const RepasSection = ({ title, content, dayTimeCol }: RepasSectionProps) => {
               dayTimeCol={dayTimeCol}
               content={""}
               setEditing={setShowAddModal}
-              handleValidate={handleAddLine}
+              handleValidate={handleAddLine({ content, dayTimeCol, hideModal })}
             />
           )}
         </div>

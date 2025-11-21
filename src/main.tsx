@@ -4,15 +4,18 @@ import App from "./App.tsx";
 import { DatabaseContextProvider } from "./contexts/databaseContext.tsx";
 import { SuiviDaysContextProvider } from "./contexts/suiviDaysContext.tsx";
 import { TargetsContextProvider } from "./contexts/targetsContext.tsx";
+import { PasswordContextProvider } from "./contexts/passwordContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
-  <TargetsContextProvider>
-    <SuiviDaysContextProvider>
-      <DatabaseContextProvider>
-        <App />
-      </DatabaseContextProvider>
-    </SuiviDaysContextProvider>
-  </TargetsContextProvider>
+  <PasswordContextProvider>
+    <TargetsContextProvider>
+      <SuiviDaysContextProvider>
+        <DatabaseContextProvider>
+          <App />
+        </DatabaseContextProvider>
+      </SuiviDaysContextProvider>
+    </TargetsContextProvider>
+  </PasswordContextProvider>
   // </StrictMode>,
 );

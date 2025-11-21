@@ -1,12 +1,23 @@
 import axios from "axios";
 import type { Target } from "../contexts/targetsContext";
-const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
+import { retrievePassword } from "../utils/retrievePassword";
+import { handleApiAnswer } from "./handleApiAnswer";
+// const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
 
-export const fetchTargets = async (setTargets: (c: Target[]) => void) => {
+type FetchTargetsProps = {
+  setTargets: (c: Target[]) => void;
+  setInvalidPassword: (c: boolean) => void;
+};
+
+export const fetchTargets = async ({
+  setTargets,
+  setInvalidPassword,
+}: FetchTargetsProps) => {
+  console.log("fetchTargets");
   const response = await axios.post<Target[]>(
     "https://script.google.com/macros/s/AKfycbwfS4pf5wsLEE8gFEdx--1IOOLoMWu-xXOJHtoyG99cqcyzvPGh5c10Fiwk3c7czQQ/exec",
     {
-      password,
+      password: retrievePassword(),
       method: "getTargets",
     },
     {
@@ -17,7 +28,9 @@ export const fetchTargets = async (setTargets: (c: Target[]) => void) => {
     }
   );
 
-  if (response.status === 200) {
-    setTargets(response.data);
-  }
+  handleApiAnswer({
+    callback: () => setTargets(response.data),
+    response,
+    setInvalidPassword,
+  });
 };

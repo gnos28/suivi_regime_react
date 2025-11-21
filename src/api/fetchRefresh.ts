@@ -1,13 +1,19 @@
 import axios from "axios";
 import type { DatabaseColName } from "../types/globales";
-const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
+import { retrievePassword } from "../utils/retrievePassword";
+import { handleApiAnswer } from "./handleApiAnswer";
+// const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
 
-export const fetchRefresh = async () => {
+type FetchRefreshProps = { setInvalidPassword: (c: boolean) => void };
+
+export const fetchRefresh = async ({
+  setInvalidPassword,
+}: FetchRefreshProps) => {
   console.log("fetchRefresh");
   const response = await axios.post<Record<DatabaseColName, string | number>[]>(
     "https://script.google.com/macros/s/AKfycbwfS4pf5wsLEE8gFEdx--1IOOLoMWu-xXOJHtoyG99cqcyzvPGh5c10Fiwk3c7czQQ/exec",
     {
-      password,
+      password: retrievePassword(),
       method: "forceRefresh",
     },
     {
@@ -19,5 +25,10 @@ export const fetchRefresh = async () => {
   );
 
   console.log({ response });
-  if (response.status === 200) return "OK";
+
+  handleApiAnswer({
+    callback: () => "OK",
+    response,
+    setInvalidPassword,
+  });
 };

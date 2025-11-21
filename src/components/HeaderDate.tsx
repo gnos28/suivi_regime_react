@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
-import { globales, type SuiviColName } from "../types/globales";
+import { globales } from "../types/globales";
 import { calcColumnTotal } from "../utils/calcColumnTotal";
-import DatabaseContext from "../contexts/databaseContext";
 import Donut from "./Donut";
-import TargetsContext from "../contexts/targetsContext";
+import { useSuiviRegime } from "../hooks/useSuiviRegime";
 
 const Carence = ({ nutriment }: { nutriment: string }) => {
   return (
@@ -23,20 +22,14 @@ type Carence = {
   max: string | undefined;
 };
 
-type HeaderDateProps = {
-  today: Date;
-  suiviDay: Record<SuiviColName, string | number | undefined> | undefined;
-};
-
-const HeaderDate = ({ today, suiviDay }: HeaderDateProps) => {
-  const { database } = useContext(DatabaseContext);
-  const { targets } = useContext(TargetsContext);
+const HeaderDate = () => {
+  const { database, targets, selectedDay, selectedSuiviDay } = useSuiviRegime();
   const [carences, setCarences] = useState<Carence[]>([]);
 
-  const calcCarences = () => {
+  const calcCarences = useCallback(() => {
     const nutrimentsData = globales.nutrimentsColNames.map((nutriment) => {
-      const dayValue = suiviDay?.[nutriment]
-        ? parseFloat((suiviDay?.[nutriment] ?? 0).toString())
+      const dayValue = selectedSuiviDay?.[nutriment]
+        ? parseFloat((selectedSuiviDay?.[nutriment] ?? 0).toString())
         : 0;
       const min = targets.find(
         (target) => target.targetName === nutriment
@@ -67,12 +60,12 @@ const HeaderDate = ({ today, suiviDay }: HeaderDateProps) => {
       });
 
     setCarences(carences);
-  };
+  }, [selectedSuiviDay, targets]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     calcCarences();
-  }, [suiviDay]);
+  }, [calcCarences, selectedSuiviDay]);
 
   // const excesses = nutrimentsData
   //   .filter((item) => item.excess !== null)
@@ -85,10 +78,10 @@ const HeaderDate = ({ today, suiviDay }: HeaderDateProps) => {
 
   const calcColumnTotalDay = calcColumnTotal({
     periods: [
-      suiviDay?.matin?.toString() ?? "",
-      suiviDay?.midi?.toString() ?? "",
-      suiviDay?.goûter?.toString() ?? "",
-      suiviDay?.soir?.toString() ?? "",
+      selectedSuiviDay?.matin?.toString() ?? "",
+      selectedSuiviDay?.midi?.toString() ?? "",
+      selectedSuiviDay?.goûter?.toString() ?? "",
+      selectedSuiviDay?.soir?.toString() ?? "",
     ],
     database: database,
   });
@@ -111,12 +104,16 @@ const HeaderDate = ({ today, suiviDay }: HeaderDateProps) => {
 
   return (
     <h2 className={styles.headerDate}>
-      {today.toLocaleDateString("fr-FR", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })}
+      <span>
+        {selectedDay
+          .toLocaleDateString("fr-FR", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+          .toUpperCase()}
+      </span>
       <div className={styles.nutritionTotals}>
         <Donut
           value={calcColumnTotalDay("Calories")}

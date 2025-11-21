@@ -1,22 +1,32 @@
-import type { SuiviColName } from "../types/globales";
+import { useSuiviRegime } from "../hooks/useSuiviRegime";
 import RepasSection from "./RepasSection";
 import styles from "./SuiviDay.module.scss";
 
-type SuiviDayProps = {
-  suiviDay: Record<SuiviColName, string | number>;
-};
+const SuiviDay = () => {
+  const { selectedSuiviDay } = useSuiviRegime();
 
-const SuiviDay = ({ suiviDay }: SuiviDayProps) => {
   return (
     <div className={styles.suiviDayContainer}>
-      <RepasSection title="Matin" dayTimeCol="matin" content={suiviDay.matin} />
-      <RepasSection title="Midi" dayTimeCol="midi" content={suiviDay.midi} />
+      <RepasSection
+        title="Matin"
+        dayTimeCol="matin"
+        content={selectedSuiviDay?.matin}
+      />
+      <RepasSection
+        title="Midi"
+        dayTimeCol="midi"
+        content={selectedSuiviDay?.midi}
+      />
       <RepasSection
         title="Goûter"
         dayTimeCol="goûter"
-        content={suiviDay.goûter}
+        content={selectedSuiviDay?.goûter}
       />
-      <RepasSection title="Soir" dayTimeCol="soir" content={suiviDay.soir} />
+      <RepasSection
+        title="Soir"
+        dayTimeCol="soir"
+        content={selectedSuiviDay?.soir}
+      />
     </div>
   );
 };

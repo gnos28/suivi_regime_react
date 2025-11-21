@@ -1,51 +1,73 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { Suspense, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import styles from "./App.module.scss";
-import { convertJsonStringToDate, convertDateToString } from "./utils/utils";
 import SuiviDay from "./components/SuiviDay";
 import HeaderDate from "./components/HeaderDate";
 import NavBar from "./components/NavBar";
-import DatabaseContext from "./contexts/databaseContext";
-import SuiviDaysContext from "./contexts/suiviDaysContext";
-import TargetsContext from "./contexts/targetsContext";
-import { fetchTargets } from "./api/fetchTargets";
-import { fetchSuiviDays } from "./api/fetchSuiviDays";
-import { fetchDatabase } from "./api/fetchDatabase";
-import type { SuiviColName } from "./types/globales";
+import { useSuiviRegime } from "./hooks/useSuiviRegime";
+import LoadingRing from "./components/LoadingRing";
+import PasswordContext from "./contexts/passwordContext";
+import PasswordModal from "./components/PasswordModal";
 
 function App() {
-  const { setDatabase } = useContext(DatabaseContext);
-  const { setSuiviDays, suiviDays } = useContext(SuiviDaysContext);
-  const { setTargets } = useContext(TargetsContext);
+  const { refreshAllData, selectedSuiviDay, isLoading } = useSuiviRegime();
 
-  const [suiviToday, setSuiviToday] = useState<
-    Record<SuiviColName, string | number> | undefined
-  >(undefined);
+  const { password, setPassword, invalidPassword, setInvalidPassword } =
+    useContext(PasswordContext);
 
-  const today = useMemo(() => new Date(), []);
-
-  useEffect(() => {
-    fetchSuiviDays(setSuiviDays);
-    fetchDatabase(setDatabase);
-    fetchTargets(setTargets);
-  }, [setDatabase, setSuiviDays, setTargets]);
+  const getPasswordFromLocalStorage = useCallback(() => {
+    const storedPassword = localStorage.getItem("suivi_regime_password");
+    if (storedPassword && storedPassword.trim() !== "") {
+      setPassword(storedPassword);
+    } else {
+      setPassword("");
+    }
+  }, [setPassword]);
 
   useEffect(() => {
-    const suiviToday = suiviDays.find(
-      (suiviDay) =>
-        convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
-        convertDateToString(today)
-    );
-    setSuiviToday(suiviToday);
-  }, [suiviDays, today]);
+    if (password && password.trim() !== "" && !isLoading) {
+      console.log("*** app useEffect");
+      console.log({ password, isLoading });
+
+      try {
+        refreshAllData();
+        setInvalidPassword(false);
+        localStorage.setItem("suivi_regime_password", password);
+      } catch (error) {
+        console.error("Invalid password:", error);
+        setInvalidPassword(true);
+        setPassword("");
+        localStorage.removeItem("suivi_regime_password");
+      }
+    }
+  }, [password]);
+
+  useEffect(() => {
+    if (invalidPassword) {
+      setPassword("");
+      localStorage.removeItem("suivi_regime_password");
+    }
+  }, [invalidPassword, setPassword]);
+
+  useEffect(() => {
+    getPasswordFromLocalStorage();
+  }, [getPasswordFromLocalStorage]);
 
   return (
     <div className={styles.appContainer}>
-      <HeaderDate today={today} suiviDay={suiviToday} />
-      <Suspense fallback={<div>Loading...</div>}>
-        {suiviToday !== undefined && <SuiviDay suiviDay={suiviToday} />}
-      </Suspense>
-      <NavBar today={today} />
+      {password === "" || invalidPassword ? (
+        <PasswordModal />
+      ) : (
+        <>
+          <HeaderDate />
+          {isLoading ? (
+            <LoadingRing />
+          ) : (
+            selectedSuiviDay !== undefined && <SuiviDay />
+          )}
+          <NavBar />
+        </>
+      )}
     </div>
   );
 }

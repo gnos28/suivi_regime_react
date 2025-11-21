@@ -1,5 +1,7 @@
 import axios from "axios";
-const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
+import { retrievePassword } from "../utils/retrievePassword";
+import { handleApiAnswer } from "./handleApiAnswer";
+// const password = import.meta.env.VITE_SUIVI_PASSWORD || "";
 
 type Payload = {
   date: string;
@@ -13,13 +15,21 @@ type Payload = {
   commentaire?: string;
 };
 
-export const fetchUpdateSuiviDay = async (payload: Payload) => {
+type FetchUpdateSuiviDayProps = {
+  payload: Payload;
+  setInvalidPassword: (c: boolean) => void;
+};
+
+export const fetchUpdateSuiviDay = async ({
+  payload,
+  setInvalidPassword,
+}: FetchUpdateSuiviDayProps) => {
   console.log("fetchUpdateSuiviDay", { payload });
 
   const response = await axios.post(
     "https://script.google.com/macros/s/AKfycbwfS4pf5wsLEE8gFEdx--1IOOLoMWu-xXOJHtoyG99cqcyzvPGh5c10Fiwk3c7czQQ/exec",
     {
-      password,
+      password: retrievePassword(),
       method: "updateSuiviDays",
       payload,
     },
@@ -34,4 +44,10 @@ export const fetchUpdateSuiviDay = async (payload: Payload) => {
   console.log({ response });
 
   if (response.status === 200) return "OK";
+
+  handleApiAnswer({
+    callback: () => "OK",
+    response,
+    setInvalidPassword,
+  });
 };
