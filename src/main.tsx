@@ -6,6 +6,7 @@ import { SuiviDaysContextProvider } from "./contexts/suiviDaysContext.tsx";
 import { TargetsContextProvider } from "./contexts/targetsContext.tsx";
 import { SelectedDayContextProvider } from "./contexts/selectedDayContext.tsx";
 import { PasswordContextProvider } from "./contexts/passwordContext.tsx";
+import { DonutGroupIndexContextProvider } from "./contexts/donutGroupIndexContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")!).render(
       <SuiviDaysContextProvider>
         <DatabaseContextProvider>
           <SelectedDayContextProvider>
-            <App />
+            <DonutGroupIndexContextProvider>
+              <App />
+            </DonutGroupIndexContextProvider>
           </SelectedDayContextProvider>
         </DatabaseContextProvider>
       </SuiviDaysContextProvider>

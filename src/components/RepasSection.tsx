@@ -1,12 +1,14 @@
 import styles from "./RepasSection.module.scss";
 import buttonStyles from "../styles/button.module.scss";
 import RepasLines from "./RepasLines";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { calcColumnTotal } from "../utils/calcColumnTotal";
 import RepasLineModal from "./RepasLineModal";
 import { calcColumnAverage } from "../utils/calcColumnAverage";
 import type { DatabaseColName } from "../types/globales";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import DonutGroupIndexContext from "../contexts/donutGroupIndexContext";
+import { calcDonutGroups } from "../utils/calcDonutGroups";
 
 type AverageBarProps = {
   columnName: DatabaseColName;
@@ -66,8 +68,9 @@ type RepasSectionProps = {
 const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
   const [showRepas, setShowRepas] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const { donutGroupIndex } = useContext(DonutGroupIndexContext);
 
-  const { database, suiviDays, handleAddLine, selectedSuiviDay } =
+  const { database, suiviDays, handleAddLine, selectedSuiviDay, targets } =
     useSuiviRegime();
 
   const hideModal = () => {
@@ -92,7 +95,7 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
       ? "/midi.webp"
       : dayTimeCol === "goûter"
       ? "/aprem.webp"
-      : "/soir.webp";
+      : "/soir3.webp";
 
   const splitText = (selectedSuiviDay?.[dayTimeCol] ?? "")
     .toString()
@@ -105,6 +108,12 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
         (item) => item.aliment.toString().toLowerCase() === line.toLowerCase()
       ) === false
   );
+
+  const donutGroups = calcDonutGroups({
+    database,
+    selectedSuiviDay,
+    targets,
+  });
 
   return (
     <div className={styles.repasSectionContainer}>
@@ -120,43 +129,22 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
           </div>
         )}
 
-        <div className={styles.nutritionTotalsPeriod}>
-          <AverageBar
-            columnName="Calories"
-            calcColumnTotalPeriod={calcColumnTotalPeriod}
-            calcColumnAveragePeriod={calcColumnAveragePeriod}
-            unit="kcal"
-            color="rgba(44, 44, 44, 0.2)"
-            colorRemaining="rgba(172, 172, 172, 0.2)"
-          />
-          <AverageBar
-            columnName="Proteines"
-            calcColumnTotalPeriod={calcColumnTotalPeriod}
-            calcColumnAveragePeriod={calcColumnAveragePeriod}
-            unit="g"
-            color="rgba(70, 92, 255, 0.2)"
-            colorRemaining="rgba(167, 178, 255, 0.2)"
-          />
-          <AverageBar
-            columnName="Lipides"
-            calcColumnTotalPeriod={calcColumnTotalPeriod}
-            calcColumnAveragePeriod={calcColumnAveragePeriod}
-            unit="g"
-            color="rgba(255, 217, 45, 0.35)"
-            colorRemaining="rgba(255, 233, 161, 0.2)"
-          />
-          <AverageBar
-            columnName="Glucides"
-            calcColumnTotalPeriod={calcColumnTotalPeriod}
-            calcColumnAveragePeriod={calcColumnAveragePeriod}
-            unit="g"
-            color="rgba(235, 54, 54, 0.2)"
-            colorRemaining="rgba(255, 192, 192, 0.2)"
-          />
-          {/* Cal: {calcColumnTotalPeriod("Calories").toFixed(0)} kcal | Prot:{" "}
-          {calcColumnTotalPeriod("Proteines").toFixed(1)} g | Gluc:{" "}
-          {calcColumnTotalPeriod("Glucides").toFixed(1)} g | Lip:{" "}
-          {calcColumnTotalPeriod("Lipides").toFixed(1)} g */}
+        <div
+          className={styles.nutritionTotalsPeriod}
+          style={{
+            top: donutGroups[donutGroupIndex]?.length === 4 ? "12px" : "18px",
+          }}
+        >
+          {donutGroups[donutGroupIndex]?.map((nutrient) => (
+            <AverageBar
+              columnName={nutrient.name}
+              calcColumnTotalPeriod={calcColumnTotalPeriod}
+              calcColumnAveragePeriod={calcColumnAveragePeriod}
+              unit={nutrient.unit}
+              color={nutrient.colorValue}
+              colorRemaining={nutrient.colorTarget}
+            />
+          ))}
         </div>
       </div>
       {showRepas === true && (

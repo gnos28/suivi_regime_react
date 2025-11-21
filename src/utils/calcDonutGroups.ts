@@ -110,12 +110,13 @@ export const calcDonutGroups = ({
   );
 
   type donutGroupItem = {
-    name: string;
+    name: DatabaseColName;
     colorValue: string;
     colorTarget: string;
     value: number;
     target: number;
     textLines: string[];
+    unit: string;
   };
 
   const donutGroups: donutGroupItem[][] = [
@@ -132,6 +133,7 @@ export const calcDonutGroups = ({
             0
           )} / ${targetCalories} kcal`,
         ],
+        unit: "kcal",
       },
       {
         name: "Proteines",
@@ -145,6 +147,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetProteines} g`,
         ],
+        unit: "g",
       },
       {
         name: "Lipides",
@@ -156,6 +159,7 @@ export const calcDonutGroups = ({
           "Lipides",
           `${calcColumnTotalDay("Lipides").toFixed(1)} / ${targetLipides} g`,
         ],
+        unit: "g",
       },
       {
         name: "Glucides",
@@ -167,11 +171,12 @@ export const calcDonutGroups = ({
           "Glucides",
           `${calcColumnTotalDay("Glucides").toFixed(1)} / ${targetGlucides} g`,
         ],
+        unit: "g",
       },
     ],
     [
       {
-        name: "fibres solubles",
+        name: "fibre solubles",
         colorValue: "rgba(34, 139, 34, 0.2)",
         colorTarget: "rgba(144, 238, 144, 0.2)",
         value: calcColumnTotalDay("fibre solubles"),
@@ -182,6 +187,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetFibresSolubles.toFixed(1)} g`,
         ],
+        unit: "g",
       },
       {
         name: "fibres insolubles",
@@ -195,6 +201,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetFibresInsolubles.toFixed(1)} g`,
         ],
+        unit: "g",
       },
       {
         name: "fibre total",
@@ -208,6 +215,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetFibresTotal.toFixed(0)} g`,
         ],
+        unit: "g",
       },
       {
         name: "soluble / insoluble",
@@ -224,6 +232,7 @@ export const calcDonutGroups = ({
             (calcColumnTotalDay("fibres insolubles") || 1)
           ).toFixed(2)} / ${targetFibresSolubleInsolubleRatio}`,
         ],
+        unit: "",
       },
     ],
     [
@@ -237,6 +246,7 @@ export const calcDonutGroups = ({
           "Sodium",
           `${calcColumnTotalDay("Sodium").toFixed(0)} / ${targetSodium} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Potassium",
@@ -250,6 +260,7 @@ export const calcDonutGroups = ({
             0
           )} / ${targetPotassium} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Calcium",
@@ -261,6 +272,7 @@ export const calcDonutGroups = ({
           "Calcium",
           `${calcColumnTotalDay("Calcium").toFixed(0)} / ${targetCalcium} mg`,
         ],
+        unit: "mg",
       },
     ],
     [
@@ -276,6 +288,7 @@ export const calcDonutGroups = ({
             0
           )} / ${targetMagnesium} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Fer",
@@ -287,6 +300,7 @@ export const calcDonutGroups = ({
           "Fer",
           `${calcColumnTotalDay("Fer").toFixed(1)} / ${targetFer} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Zinc",
@@ -298,6 +312,7 @@ export const calcDonutGroups = ({
           "Zinc",
           `${calcColumnTotalDay("Zinc").toFixed(1)} / ${targetZinc} mg`,
         ],
+        unit: "mg",
       },
     ],
     [
@@ -313,6 +328,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetVitamineD} µg`,
         ],
+        unit: "µg",
       },
       {
         name: "Vitamine B9",
@@ -326,6 +342,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetVitamineB9} µg`,
         ],
+        unit: "µg",
       },
       {
         name: "Vitamine B12",
@@ -339,6 +356,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetVitamineB12} µg`,
         ],
+        unit: "µg",
       },
       {
         name: "Vitamine C",
@@ -352,6 +370,7 @@ export const calcDonutGroups = ({
             1
           )} / ${targetVitamineC} mg`,
         ],
+        unit: "mg",
       },
     ],
     [
@@ -365,6 +384,7 @@ export const calcDonutGroups = ({
           "Oméga-3",
           `${calcColumnTotalDay("Oméga-3").toFixed(1)} / ${targetOmega3} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Oméga-6",
@@ -376,6 +396,7 @@ export const calcDonutGroups = ({
           "Oméga-6",
           `${calcColumnTotalDay("Oméga-6").toFixed(1)} / ${targetOmega6} mg`,
         ],
+        unit: "mg",
       },
       {
         name: "Ω3 / Ω6",
@@ -390,6 +411,7 @@ export const calcDonutGroups = ({
             calcColumnTotalDay("Oméga-3") / (calcColumnTotalDay("Oméga-6") || 1)
           ).toFixed(2)} / ${targetOmega3Omega6Ratio}`,
         ],
+        unit: "",
       },
     ],
   ];

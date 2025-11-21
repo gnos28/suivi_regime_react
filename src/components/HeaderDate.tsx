@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
 import { globales } from "../types/globales";
 import Donut from "./Donut";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
 import { calcDonutGroups } from "../utils/calcDonutGroups";
+import DonutGroupIndexContext from "../contexts/donutGroupIndexContext";
 
 const Carence = ({ nutriment }: { nutriment: string }) => {
   return (
@@ -32,7 +33,9 @@ const HeaderDate = () => {
     goToNextDay,
   } = useSuiviRegime();
   const [carences, setCarences] = useState<Carence[]>([]);
-  const [donutGroupIndex, setDonutGroupIndex] = useState(0);
+  const { donutGroupIndex, setDonutGroupIndex } = useContext(
+    DonutGroupIndexContext
+  );
 
   const calcCarences = useCallback(() => {
     const nutrimentsData = globales.nutrimentsColNames.map((nutriment) => {
@@ -91,9 +94,10 @@ const HeaderDate = () => {
   });
 
   const goToNextDonutGroup = () => {
-    setDonutGroupIndex((prevIndex) =>
-      prevIndex + 1 < donutGroups.length ? prevIndex + 1 : 0
-    );
+    const newIndex =
+      donutGroupIndex + 1 < donutGroups.length ? donutGroupIndex + 1 : 0;
+
+    setDonutGroupIndex(newIndex);
   };
 
   return (
