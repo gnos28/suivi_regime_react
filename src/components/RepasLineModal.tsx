@@ -87,13 +87,20 @@ const RepasLineModal = ({
   }, [editedContent, database]);
 
   return (
-    <div className={styles.modalBackground} onClick={() => setEditing(false)}>
+    <div
+      className={styles.modalBackground}
+      onClick={() => {
+        console.log("close modal");
+        
+        setEditing(false);
+      }}
+    >
       <div
         className={styles.modalContainer}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.suggestionsContainer}>
-          <h2>Most Used Aliments</h2>
+          <h2>Mes habitudes</h2>
           {mostUsedAliments.slice(0, 5).map((suggestion, index) => (
             <div
               key={index}

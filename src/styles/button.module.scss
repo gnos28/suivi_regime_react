@@ -1,0 +1,47 @@
+.btnGrad {
+  background-image: linear-gradient(
+    to right,
+    #ece9e67a 0%,
+    #ffffff 51%,
+    #ece9e67a 100%
+  );
+}
+.btnGrad {
+  margin: 10px 15px;
+  padding: 0px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  cursor: pointer;
+  user-select: none;
+  // border: #d9d9d9a1 solid 1px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btnGrad:hover,
+.btnGrad:active {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.btnGrad:active {
+  transform: scale(0.95);
+}
+
+.btnGrad > span {
+  transition: filter 0.5s ease;
+  filter: opacity(0.5) grayscale(0.3);
+}
+
+.btnGrad:hover > span,
+.btnGrad:active > span {
+  filter: opacity(1) grayscale(0.1);
+}

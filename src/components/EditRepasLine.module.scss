@@ -1,15 +1,31 @@
 .editRepasLineContainer {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-end;
+  // gap: 0.5rem;
 }
 
 .repasLine {
   display: block;
-  margin-bottom: 0.5rem;
+  // margin-bottom: 0.5rem;
   font-size: 1rem;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   padding: 0.25rem;
+  // background-color: #fff;
+  // border: 1px solid red;
+  width: 100%;
+  position: relative;
+}
+
+.repasLine::after {
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+  content: "";
+  display: block;
+  width: calc(100% - 10px);
+  height: 1px;
+  background-color: #ccc;
+  // margin-top: 0.5rem;
 }
 
 .editRepasLine {
@@ -26,17 +42,28 @@
 }
 
 .editButton {
-  padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+  min-height: 62px;
+  min-width: 62px;
+  height: 62px;
+  width: 62px;
+  padding: 0;
+  margin: 0;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #ffffff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  // color: #ffffff;
+  // background-color: #ddd;
+  // border: none;
+  // border-radius: 4px;
+  // cursor: pointer;
+  // text-align: center;
+  // user-select: none;
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .editButton:hover {
-  color: #007bff;
+  // transition: all 0.3s ease;
+  // background-color: #aaa;
 }

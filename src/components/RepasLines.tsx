@@ -1,6 +1,8 @@
 import { useState } from "react";
 import EditRepasLine from "./EditRepasLine";
 import style from "./RepasLines.module.scss";
+import { fetchUpdateSuiviDay } from "../api/fetchUpdateSuiviDay";
+import { convertDateToString, removeAccents } from "../utils/utils";
 
 type RepasLinesProps = {
   text: string | number | undefined;
@@ -8,6 +10,8 @@ type RepasLinesProps = {
 };
 
 const RepasLines = ({ text, dayTimeCol }: RepasLinesProps) => {
+  const today = new Date();
+
   const [splitText, setSplitText] = useState<string[]>(
     (text ?? "")
       .toString()
@@ -16,9 +20,15 @@ const RepasLines = ({ text, dayTimeCol }: RepasLinesProps) => {
   );
 
   const handleEditLine = (index: number) => (newLine: string) => {
+    if (newLine.trim() === "") return;
+
     const updatedLines = [...splitText];
     updatedLines[index] = newLine;
     setSplitText(updatedLines);
+    fetchUpdateSuiviDay({
+      date: convertDateToString(today),
+      [removeAccents(dayTimeCol)]: updatedLines.join("\n"),
+    });
   };
 
   return (

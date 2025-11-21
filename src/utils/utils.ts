@@ -7,3 +7,10 @@ export const convertDateToString = (date: Date) => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${day}/${month}/${year}`;
 };
+
+export const removeAccents = (
+  dayTimeCol: "matin" | "midi" | "goûter" | "soir"
+) => {
+  if (dayTimeCol === "goûter") return "gouter";
+  return dayTimeCol;
+};

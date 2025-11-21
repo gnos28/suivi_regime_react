@@ -22,3 +22,22 @@
   justify-content: space-around;
   flex-direction: row;
 }
+
+.carencesContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+.carence {
+  background-color: rgba(255, 196, 0, 0.373);
+  color: #5f1a18;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  margin: 0.2rem 0;
+  font-size: 0.6rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

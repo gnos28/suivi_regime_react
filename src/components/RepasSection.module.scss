@@ -4,29 +4,117 @@
   justify-content: space-between;
   //   margin-bottom: 2rem;
   gap: 1rem;
+  position: relative;
+  // min-height: auto;
+}
+
+.repasSectionContainer::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+  width: calc(100% - 10px);
+  border-bottom: 2px solid #888;
 }
 
 .repasSectionTitle {
-  font-size: 1.2rem;
+  position: relative;
   font-weight: bold;
   cursor: pointer;
   text-align: center;
-  background-color: #c3e0ff;
+  background-color: #ffffff;
   color: #000000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// .repasSectionTitle::after {
+//   content: "▼";
+//   font-size: 1rem;
+//   transform: rotate(0deg);
+//   transition: transform 0.3s ease;
+// }
+
+// .repasSectionTitle.expanded::after {
+//   transform: rotate(180deg);
+// }
+
+.repasSectionTitle > h3 {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  margin: 0;
+  font-size: 0.6rem;
+  color: #666;
+}
+
+.repasSectionImage {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
 }
 
 .repasSectionContent {
   white-space: pre-wrap;
   font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .nutritionTotalsPeriod {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  // margin-top: 0.5rem;
+  font-size: 0.6rem;
   color: #000000;
+  display: flex;
+
+  flex-direction: column;
+  align-items: right;
+  background-color: #f0f0f0;
+  gap: 2px;
+}
+
+.averageBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // gap: 0.5rem;
+  // margin-top: 0.5rem;
+  position: relative;
+}
+
+.averageBarLabel {
+  position: absolute;
+  left: -55px;
+  width: 50px;
+  text-align: right;
+  font-size: 0.6rem;
+  color: #333333;
+  margin-right: 0.5rem;
+}
+
+@keyframes growingFromTop {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+  }
+  80% {
+    transform: scaleY(1.05);
+    transform-origin: top;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
 }
 
 .repasSectionContent {
+  animation: growingFromTop 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -36,23 +124,35 @@
 }
 
 .addButton {
-  //   display: inline-block;*
-  align-self: center;
-  width: calc(100% - 3rem);
-  max-width: 90vw;
-  padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+  min-height: 62px;
+  min-width: 62px;
+  height: 62px;
+  // width: 62px;
+  padding: 0;
+  margin: 0;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #ffffff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  user-select: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //   display: inline-block;*
+  // align-self: center;
+  // width: calc(100% - 4rem);
+  // max-width: 90vw;
+  // padding: 0.05rem 1rem;
+  // font-size: 2.5rem;
+  // font-weight: bold;
+  // color: #000;
+  // background-color: #ddd;
+  // border: none;
+  // border-radius: 4px;
+  // cursor: pointer;
+  // text-align: center;
+  // margin-bottom: 0.5rem;
+  // user-select: none;
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .addButton:hover {
-  background-color: #0056b3;
+  // transition: all 0.3s ease;
+  // background-color: #aaa;
 }

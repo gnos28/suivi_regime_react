@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./EditRepasLine.module.scss";
+import buttonStyles from "../styles/button.module.scss";
 import RepasLineModal from "./RepasLineModal";
 
 type EditRepasLineProps = {
@@ -31,8 +32,11 @@ const EditRepasLine = ({
         />
       )}
 
-      <div onClick={() => setEditing(true)} className={styles.editButton}>
-        ✏️
+      <div
+        onClick={() => setEditing(true)}
+        className={[buttonStyles.btnGrad, styles.editButton].join(" ")}
+      >
+        <span>✏️</span>
       </div>
       <span className={styles.repasLine}>{line}</span>
     </div>
