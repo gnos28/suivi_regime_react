@@ -7,6 +7,7 @@ import { useSuiviRegime } from "../hooks/useSuiviRegime";
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
   handleValidate: (content: string) => void;
+  handleDelete?: () => void;
   content: string;
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
 };
@@ -14,6 +15,7 @@ type RepasLineModalProps = {
 const RepasLineModal = ({
   setEditing,
   handleValidate,
+  handleDelete,
   content,
   dayTimeCol,
 }: RepasLineModalProps) => {
@@ -151,12 +153,14 @@ const RepasLineModal = ({
             >
               Valider
             </button>
-            <button
-              onClick={() => setEditing(false)}
-              className={[styles.button, styles.cancelButton].join(" ")}
-            >
-              Annuler
-            </button>
+            {handleDelete !== undefined && (
+              <button
+                onClick={handleDelete}
+                className={[styles.button, styles.cancelButton].join(" ")}
+              >
+                Supprimer
+              </button>
+            )}
           </div>
         </div>
       </div>

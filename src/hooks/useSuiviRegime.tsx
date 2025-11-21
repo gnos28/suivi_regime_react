@@ -93,18 +93,68 @@ export const useSuiviRegime = () => {
   type HandleEditLineProps = {
     dayTimeCol: "matin" | "midi" | "goûter" | "soir";
     splitText: string[];
-    setSplitText: (lines: string[]) => void;
+    // setSplitText: (lines: string[]) => void;
   };
 
   const handleEditLine =
-    ({ dayTimeCol, splitText, setSplitText }: HandleEditLineProps) =>
+    ({ dayTimeCol, splitText }: HandleEditLineProps) =>
     (index: number) =>
     (newLine: string) => {
       if (newLine.trim() === "") return;
 
       const updatedLines = [...splitText];
       updatedLines[index] = newLine;
-      setSplitText(updatedLines);
+
+      setSuiviDays(
+        suiviDays.map((suiviDay) => {
+          if (
+            convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
+            convertDateToString(selectedDay)
+          ) {
+            return {
+              ...suiviDay,
+              [dayTimeCol]: updatedLines.join("\n"),
+            };
+          } else return suiviDay;
+        })
+      );
+
+      // setSplitText(updatedLines);
+      fetchUpdateSuiviDay({
+        payload: {
+          date: convertDateToString(selectedDay),
+          [removeAccents(dayTimeCol)]: updatedLines.join("\n"),
+        },
+        setInvalidPassword,
+      });
+    };
+
+  type HandleRemoveLineProps = {
+    dayTimeCol: "matin" | "midi" | "goûter" | "soir";
+    splitText: string[];
+    // setSplitText: (lines: string[]) => void;
+  };
+
+  const handleRemoveLine =
+    ({ dayTimeCol, splitText }: HandleRemoveLineProps) =>
+    (index: number) =>
+    () => {
+      const updatedLines = splitText.filter((_, i) => i !== index);
+
+      setSuiviDays(
+        suiviDays.map((suiviDay) => {
+          if (
+            convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
+            convertDateToString(selectedDay)
+          ) {
+            return {
+              ...suiviDay,
+              [dayTimeCol]: updatedLines.join("\n"),
+            };
+          } else return suiviDay;
+        })
+      );
+
       fetchUpdateSuiviDay({
         payload: {
           date: convertDateToString(selectedDay),
@@ -132,6 +182,7 @@ export const useSuiviRegime = () => {
     selectedSuiviDay,
     handleAddLine,
     handleEditLine,
+    handleRemoveLine,
     isLoading,
   };
 };

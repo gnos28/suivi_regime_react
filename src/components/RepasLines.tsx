@@ -1,4 +1,3 @@
-import { useState } from "react";
 import EditRepasLine from "./EditRepasLine";
 import style from "./RepasLines.module.scss";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
@@ -9,14 +8,12 @@ type RepasLinesProps = {
 };
 
 const RepasLines = ({ text, dayTimeCol }: RepasLinesProps) => {
-  const { handleEditLine } = useSuiviRegime();
+  const { handleEditLine, handleRemoveLine } = useSuiviRegime();
 
-  const [splitText, setSplitText] = useState<string[]>(
-    (text ?? "")
-      .toString()
-      .split("\n")
-      .filter((textLine) => textLine.trim() !== "")
-  );
+  const splitText = (text ?? "")
+    .toString()
+    .split("\n")
+    .filter((textLine) => textLine.trim() !== "");
 
   return (
     <>
@@ -27,7 +24,12 @@ const RepasLines = ({ text, dayTimeCol }: RepasLinesProps) => {
             handleEditLine={handleEditLine({
               dayTimeCol,
               splitText,
-              setSplitText,
+              // setSplitText,
+            })(index)}
+            handleRemoveLine={handleRemoveLine({
+              dayTimeCol,
+              splitText,
+              // setSplitText,
             })(index)}
             dayTimeCol={dayTimeCol}
           />

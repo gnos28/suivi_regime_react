@@ -6,12 +6,14 @@ import RepasLineModal from "./RepasLineModal";
 type EditRepasLineProps = {
   line: string;
   handleEditLine: (newLine: string) => void;
+  handleRemoveLine: () => void;
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
 };
 
 const EditRepasLine = ({
   line,
   handleEditLine,
+  handleRemoveLine,
   dayTimeCol,
 }: EditRepasLineProps) => {
   const [editing, setEditing] = useState(false);
@@ -21,6 +23,11 @@ const EditRepasLine = ({
     handleEditLine(content);
   };
 
+  const handleDelete = () => {
+    setEditing(false);
+    handleRemoveLine();
+  };
+
   return (
     <div className={styles.editRepasLineContainer}>
       {editing === true && (
@@ -28,6 +35,7 @@ const EditRepasLine = ({
           content={line}
           setEditing={setEditing}
           handleValidate={handleValidate}
+          handleDelete={handleDelete}
           dayTimeCol={dayTimeCol}
         />
       )}

@@ -20,6 +20,16 @@
   }
 }
 
+.navBarContainer::after {
+  content: "";
+  position: absolute;
+  bottom: -120px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background-color: #eeeeeeb3;
+}
+
 .rotatingIcon {
   display: inline-block;
   animation: rotation 2s infinite linear;
