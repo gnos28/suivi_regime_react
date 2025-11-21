@@ -26,7 +26,7 @@ const Donut = ({
   textLines,
 }: DonutProps) => {
   const data: ChartData<"doughnut", number[], string> = {
-    labels: ["Calories", "Remaining"],
+    labels: ["", ""],
     datasets: [
       {
         data: [value, target - value],
@@ -59,6 +59,9 @@ const Donut = ({
           plugins: {
             legend: {
               display: false,
+            },
+            tooltip: {
+              enabled: false,
             },
           },
         }}

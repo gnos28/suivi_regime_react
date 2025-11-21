@@ -4,6 +4,7 @@ import { globales } from "../types/globales";
 import { calcColumnTotal } from "../utils/calcColumnTotal";
 import Donut from "./Donut";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import { calcDonutGroups } from "../utils/calcDonutGroups";
 
 const Carence = ({ nutriment }: { nutriment: string }) => {
   return (
@@ -25,6 +26,7 @@ type Carence = {
 const HeaderDate = () => {
   const { database, targets, selectedDay, selectedSuiviDay } = useSuiviRegime();
   const [carences, setCarences] = useState<Carence[]>([]);
+  const [donutGroupIndex, setDonutGroupIndex] = useState(0);
 
   const calcCarences = useCallback(() => {
     const nutrimentsData = globales.nutrimentsColNames.map((nutriment) => {
@@ -76,31 +78,17 @@ const HeaderDate = () => {
   //     return a.excess - b.excess;
   //   });
 
-  const calcColumnTotalDay = calcColumnTotal({
-    periods: [
-      selectedSuiviDay?.matin?.toString() ?? "",
-      selectedSuiviDay?.midi?.toString() ?? "",
-      selectedSuiviDay?.goûter?.toString() ?? "",
-      selectedSuiviDay?.soir?.toString() ?? "",
-    ],
-    database: database,
+  const donutGroups = calcDonutGroups({
+    selectedSuiviDay,
+    database,
+    targets,
   });
 
-  const targetCalories = parseFloat(
-    targets.find((target) => target.targetName === "Calories")?.min ?? "0"
-  );
-
-  const targetProteines = parseFloat(
-    targets.find((target) => target.targetName === "Proteines")?.min ?? "0"
-  );
-
-  const targetGlucides = parseFloat(
-    targets.find((target) => target.targetName === "Glucides")?.min ?? "0"
-  );
-
-  const targetLipides = parseFloat(
-    targets.find((target) => target.targetName === "Lipides")?.min ?? "0"
-  );
+  const goToNextDonutGroup = () => {
+    setDonutGroupIndex((prevIndex) =>
+      prevIndex + 1 < donutGroups.length ? prevIndex + 1 : 0
+    );
+  };
 
   return (
     <h2 className={styles.headerDate}>
@@ -114,53 +102,17 @@ const HeaderDate = () => {
           })
           .toUpperCase()}
       </span>
-      <div className={styles.nutritionTotals}>
-        <Donut
-          value={calcColumnTotalDay("Calories")}
-          target={targetCalories}
-          colorValue="rgba(44, 44, 44, 0.2)"
-          colorTarget="rgba(172, 172, 172, 0.2)"
-          textLines={[
-            "Calories",
-            `${calcColumnTotalDay("Calories").toFixed(
-              0
-            )} / ${targetCalories} kcal`,
-          ]}
-        />
-        <Donut
-          value={calcColumnTotalDay("Proteines")}
-          target={targetProteines}
-          colorValue="rgba(70, 92, 255, 0.2)"
-          colorTarget="rgba(167, 178, 255, 0.2)"
-          textLines={[
-            "Proteines",
-            `${calcColumnTotalDay("Proteines").toFixed(
-              1
-            )} / ${targetProteines} g`,
-          ]}
-        />
-        <Donut
-          value={calcColumnTotalDay("Glucides")}
-          target={targetGlucides}
-          colorValue="rgba(255, 217, 45, 0.35)"
-          colorTarget="rgba(255, 233, 161, 0.2)"
-          textLines={[
-            "Glucides",
-            `${calcColumnTotalDay("Glucides").toFixed(
-              1
-            )} / ${targetGlucides} g`,
-          ]}
-        />
-        <Donut
-          value={calcColumnTotalDay("Lipides")}
-          target={targetLipides}
-          colorValue="rgba(235, 54, 54, 0.2)"
-          colorTarget="rgba(255, 192, 192, 0.2)"
-          textLines={[
-            "Lipides",
-            `${calcColumnTotalDay("Lipides").toFixed(1)} / ${targetLipides} g`,
-          ]}
-        />
+      <div className={styles.nutritionTotals} onClick={goToNextDonutGroup}>
+        {donutGroups[donutGroupIndex].map((donutItem) => (
+          <Donut
+            key={donutItem.name}
+            value={donutItem.value}
+            target={donutItem.target}
+            colorValue={donutItem.colorValue}
+            colorTarget={donutItem.colorTarget}
+            textLines={donutItem.textLines}
+          />
+        ))}
       </div>
       <div className={styles.carencesContainer}>
         {carences
