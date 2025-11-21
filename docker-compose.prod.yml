@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  front:
+    build:
+      context: ./
+      target: production
+    # Command is now handled by the Dockerfile CMD
+    ports:
+      - "3334:3000"
+    networks:
+      - dev4me_nutrition_lan
+    restart: always
+
+networks:
+  dev4me_nutrition_lan:
+    driver: bridge

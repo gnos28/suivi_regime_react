@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  front:
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/front
+      - /front/node_modules
+    command: npm run dev -- --host
+    ports:
+      - "5173:5173"
+    networks:
+      - dev4me_nutrition_lan
+    restart: always
+
+networks:
+  dev4me_nutrition_lan:
+    driver: bridge

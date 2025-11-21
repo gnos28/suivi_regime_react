@@ -22,7 +22,7 @@ export const useSuiviRegime = () => {
   const { targets, setTargets } = useContext(TargetsContext);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
+  const [selectedDay] = useState<Date>(new Date());
   const [selectedSuiviDay, setSelectedSuiviDay] = useState<
     Record<SuiviColName, string | number> | undefined
   >(undefined);
