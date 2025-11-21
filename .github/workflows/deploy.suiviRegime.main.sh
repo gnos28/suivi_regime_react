@@ -13,7 +13,7 @@ cd suivi_regime_react/
 # git pull -f --rebase origin main
 
 # récupérer les .env uploadés précédemment avec scp et les déplacer ici
-mv ../dotenv/suivi_regime_react/.env.frontend frontend/.env
+mv ../dotenv/dev4me_nutrition/.env.frontend frontend/.env
 
 # build docker images
 docker compose -f docker-compose.prod.yml build --no-cache
