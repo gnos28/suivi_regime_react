@@ -42,9 +42,10 @@ const HeaderDate = () => {
     const carences = calcCarences({
       selectedSuiviDay,
       targets,
+      database,
     });
     setCarences(carences);
-  }, [selectedSuiviDay, targets]);
+  }, [selectedSuiviDay, targets, database]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

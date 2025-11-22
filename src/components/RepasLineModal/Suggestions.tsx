@@ -3,6 +3,7 @@ import styles from "./RepasLineModal.module.scss";
 import type { DatabaseExtended } from "../../types/databaseExtended";
 import { calcCarences } from "../../utils/calcCarences";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
+import type { NutrimentsColName } from "../../types/globales";
 
 type SuggestionsProps = {
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
@@ -18,10 +19,8 @@ const Suggestions = ({
   const [suggestions, setSuggestions] = React.useState<
     { aliment: DatabaseExtended; score: number }[]
   >([]);
-  const { databaseExtended, suiviDays, selectedSuiviDay, targets } =
+  const { databaseExtended, suiviDays, selectedSuiviDay, targets, database } =
     useSuiviRegime();
-
-  const carences = calcCarences({ selectedSuiviDay, targets });
 
   useEffect(() => {
     const dayTimeRules: Record<
@@ -34,7 +33,15 @@ const Suggestions = ({
       soir: ["soir", "midi", "goûter"],
     };
 
+    const boostedNutriments: NutrimentsColName[] = [
+      "Calories",
+      "Proteines",
+      "Lipides",
+    ];
+
     const updateSuggestions = () => {
+      const carences = calcCarences({ selectedSuiviDay, targets, database });
+
       const aliments = [
         ...new Set(
           suiviDays
@@ -66,12 +73,26 @@ const Suggestions = ({
                 alimentString.trim().toLowerCase()
             );
 
+            const alreadyIncluded = selectedSuiviDay?.[dayTimeCol]
+              ?.toString()
+              .split("\n")
+              .map((item) => item.trim().toLowerCase())
+              .includes(alimentString.trim().toLowerCase());
+
+            const alimentBoost = alreadyIncluded ? -1000 : 1;
+
             if (!aliment) {
               return { aliment: alimentString, score: 0 };
             }
 
             const score = carences.reduce((acc: number, carence) => {
               const carenceMultiplier = 1 - (carence.carence ?? 1);
+
+              const nutrimentBoost = boostedNutriments.includes(
+                carence.nutriment
+              )
+                ? 10
+                : 1;
 
               if (
                 carence.nutriment === "Calories" ||
@@ -80,6 +101,8 @@ const Suggestions = ({
               ) {
                 const nutrimentScore =
                   carenceMultiplier *
+                  nutrimentBoost *
+                  alimentBoost *
                   aliment.nutrimentVsAverage[carence.nutriment];
 
                 return acc + nutrimentScore;
@@ -87,6 +110,8 @@ const Suggestions = ({
 
               const nutrimentScore =
                 carenceMultiplier *
+                nutrimentBoost *
+                alimentBoost *
                 aliment.nutrimentByCalorieVsAverage[carence.nutriment];
               return acc + nutrimentScore;
             }, 0);
@@ -117,7 +142,9 @@ const Suggestions = ({
                 ? styles.selectedSuggestion
                 : "",
             ].join(" ")}
-            onClick={() => setEditedContent(suggestion.aliment.toString())}
+            onClick={() =>
+              setEditedContent(suggestion.aliment.aliment.toString())
+            }
           >
             {suggestion.aliment.aliment}
           </div>
