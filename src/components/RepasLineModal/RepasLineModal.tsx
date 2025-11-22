@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./RepasLineModal.module.scss";
 import modalStyles from "../../styles/modal.module.scss";
-import { useSuiviRegime } from "../../hooks/useSuiviRegime";
-import { calcDonutGroups } from "../../utils/calcDonutGroups";
-import type { DatabaseExtended } from "../../types/databaseExtended";
 import NutrimentsResume from "./NutrimentsResume";
 import Autocompletion from "./Autocompletion";
 import Habitudes from "./Habitudes";
+import Suggestions from "./Suggestions";
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -24,41 +22,14 @@ const RepasLineModal = ({
   dayTimeCol,
 }: RepasLineModalProps) => {
   const [editedContent, setEditedContent] = useState(content);
-  const { databaseExtended, selectedSuiviDay, targets } = useSuiviRegime();
   const [selectedTab, setSelectedTab] = useState<
     "habitudes" | "autocompletion" | "suggestions"
   >("habitudes");
-  const [nutrimentsResume, setNutrimentsResume] =
-    useState<DatabaseExtended | null>(null);
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedContent(e.target.value.replace(/\n/g, ""));
     if (selectedTab !== "autocompletion") setSelectedTab("autocompletion");
   };
-
-  const donutGroups = calcDonutGroups({
-    database: databaseExtended,
-    selectedSuiviDay,
-    targets,
-  }).flat();
-
-  useEffect(() => {
-    const updateNutrimentsResume = () => {
-      const foundItem = databaseExtended.find(
-        (item) =>
-          item.aliment.toString().toLowerCase() ===
-          editedContent.trim().toLowerCase()
-      );
-
-      if (foundItem) {
-        setNutrimentsResume(foundItem);
-      } else {
-        setNutrimentsResume(null);
-      }
-    };
-
-    updateNutrimentsResume();
-  }, [editedContent, databaseExtended]);
 
   return (
     <div
@@ -111,12 +82,15 @@ const RepasLineModal = ({
               setEditedContent={setEditedContent}
             />
           )}
+          {selectedTab === "suggestions" && (
+            <Suggestions
+              dayTimeCol={dayTimeCol}
+              editedContent={editedContent}
+              setEditedContent={setEditedContent}
+            />
+          )}
         </div>
-        <NutrimentsResume
-          nutrimentsResume={nutrimentsResume}
-          donutGroups={donutGroups}
-          editedContent={editedContent}
-        />
+        <NutrimentsResume editedContent={editedContent} />
 
         <div className={styles.editContainer}>
           <textarea

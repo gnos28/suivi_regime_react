@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
-import { globales } from "../../types/globales";
 import Donut from "../SuiviDay/Donut";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
 import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
+import { calcCarences } from "../../utils/calcCarences";
 
 const Carence = ({ nutriment }: { nutriment: string }) => {
   return (
@@ -31,52 +31,25 @@ const HeaderDate = () => {
     selectedSuiviDay,
     goToPreviousDay,
     goToNextDay,
+    goToToday,
   } = useSuiviRegime();
   const [carences, setCarences] = useState<Carence[]>([]);
   const { donutGroupIndex, setDonutGroupIndex } = useContext(
     DonutGroupIndexContext
   );
 
-  const calcCarences = useCallback(() => {
-    const nutrimentsData = globales.nutrimentsColNames.map((nutriment) => {
-      const dayValue = selectedSuiviDay?.[nutriment]
-        ? parseFloat((selectedSuiviDay?.[nutriment] ?? 0).toString())
-        : 0;
-      const min = targets.find(
-        (target) => target.targetName === nutriment
-      )?.min;
-      const max = targets.find(
-        (target) => target.targetName === nutriment
-      )?.max;
-
-      const carence =
-        min !== undefined && isNaN(parseFloat(min)) === false
-          ? dayValue / parseFloat(min)
-          : null;
-      const excess =
-        max !== undefined && isNaN(parseFloat(max)) === false
-          ? dayValue / parseFloat(max)
-          : null;
-
-      return { nutriment, carence, excess, dayValue, min, max };
+  const calcCarencesCallback = useCallback(() => {
+    const carences = calcCarences({
+      selectedSuiviDay,
+      targets,
     });
-
-    const carences = nutrimentsData
-      .filter((item) => item.carence !== null)
-      .filter((item) => (item.carence ?? 0) < 1)
-      .sort((a, b) => {
-        if (a.carence === null) return 0;
-        if (b.carence === null) return 0;
-        return a.carence - b.carence;
-      });
-
     setCarences(carences);
   }, [selectedSuiviDay, targets]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    calcCarences();
-  }, [calcCarences, selectedSuiviDay]);
+    calcCarencesCallback();
+  }, [calcCarencesCallback, selectedSuiviDay]);
 
   // const excesses = nutrimentsData
   //   .filter((item) => item.excess !== null)
@@ -102,7 +75,7 @@ const HeaderDate = () => {
 
   return (
     <h2 className={styles.headerDate}>
-      <span>
+      <span onClick={goToToday}>
         {selectedDay
           .toLocaleDateString("fr-FR", {
             weekday: "long",

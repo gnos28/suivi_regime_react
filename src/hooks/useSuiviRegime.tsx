@@ -188,7 +188,8 @@ export const useSuiviRegime = () => {
       });
     };
 
-  const goToPreviousDay = () => {
+  const goToPreviousDay = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
     setSelectedDay((prevDay) => {
       const newDate = new Date(prevDay);
       newDate.setDate(newDate.getDate() - 1);
@@ -196,12 +197,18 @@ export const useSuiviRegime = () => {
     });
   };
 
-  const goToNextDay = () => {
+  const goToNextDay = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
     setSelectedDay((prevDay) => {
       const newDate = new Date(prevDay);
       newDate.setDate(newDate.getDate() + 1);
       return newDate;
     });
+  };
+
+  const goToToday = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
+    setSelectedDay(new Date());
   };
 
   const handleAddToDatabase = async (aliment: string) => {
@@ -355,6 +362,7 @@ export const useSuiviRegime = () => {
     isLoading,
     goToPreviousDay,
     goToNextDay,
+    goToToday,
     handleAddToDatabase,
   };
 };

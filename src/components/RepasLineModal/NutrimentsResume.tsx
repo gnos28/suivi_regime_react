@@ -1,30 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import type { DatabaseExtended } from "../../types/databaseExtended";
-import { type DatabaseColName, globales } from "../../types/globales";
+import { globales } from "../../types/globales";
 import NutrimentItem from "./NutrimentItem";
 import buttonStyles from "../../styles/button.module.scss";
 import styles from "./NutrimentsResume.module.scss";
+import { calcDonutGroups } from "../../utils/calcDonutGroups";
 
 type NutrimentsResumeProps = {
-  nutrimentsResume: DatabaseExtended | null;
-  donutGroups: {
-    name: DatabaseColName;
-    nameAbbr: string;
-    colorValue: string;
-    unitDecimals: number;
-    unit: string;
-  }[];
   editedContent: string;
 };
 
-const NutrimentsResume = ({
-  nutrimentsResume,
-  donutGroups,
-  editedContent,
-}: NutrimentsResumeProps) => {
-  const { handleAddToDatabase } = useSuiviRegime();
+const NutrimentsResume = ({ editedContent }: NutrimentsResumeProps) => {
+  const { handleAddToDatabase, databaseExtended, selectedSuiviDay, targets } =
+    useSuiviRegime();
   const [loadingGemini, setLoadingGemini] = useState(false);
+  const [nutrimentsResume, setNutrimentsResume] =
+    useState<DatabaseExtended | null>(null);
+
+  const donutGroups = calcDonutGroups({
+    database: databaseExtended,
+    selectedSuiviDay,
+    targets,
+  }).flat();
 
   const handleRequestGemini = async () => {
     if (loadingGemini) return;
@@ -32,6 +30,24 @@ const NutrimentsResume = ({
     await handleAddToDatabase(editedContent);
     setLoadingGemini(false);
   };
+
+  useEffect(() => {
+    const updateNutrimentsResume = () => {
+      const foundItem = databaseExtended.find(
+        (item) =>
+          item.aliment.toString().toLowerCase() ===
+          editedContent.trim().toLowerCase()
+      );
+
+      if (foundItem) {
+        setNutrimentsResume(foundItem);
+      } else {
+        setNutrimentsResume(null);
+      }
+    };
+
+    updateNutrimentsResume();
+  }, [editedContent, databaseExtended]);
 
   return (
     <div
