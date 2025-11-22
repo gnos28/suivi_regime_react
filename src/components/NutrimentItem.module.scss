@@ -1,0 +1,32 @@
+$height-nutriment-item: 61px;
+$width-nutriment-item: 56px;
+
+.nutrimentItem {
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: $height-nutriment-item;
+  width: $width-nutriment-item;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  border-radius: 4px;
+  border: 2px solid transparent;
+
+  & > span:first-child {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  & > span:nth-child(2) {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+    margin-top: -4px;
+    margin-bottom: -10px;
+  }
+  & > span:last-child {
+    font-size: 0.8rem;
+    color: #666;
+  }
+}

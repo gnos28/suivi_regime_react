@@ -117,27 +117,67 @@ div.modalContainer {
   }
 }
 
-.nutrimentItem {
-  flex-grow: 0;
-  flex-shrink: 0;
-  height: 55px;
-  width: 50px;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.noNutriments {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  background-color: #b5b5b5;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  overflow-x: hidden;
 
-  & > span:first-child {
-    font-size: 0.8rem;
-    color: #666;
+  & > span {
+    width: 100%;
+    text-align: center;
+    // font-size: 0.85rem;
+    color: #555;
   }
-  & > span:last-child {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #000;
+
+  .geminiButton {
+    width: 80%;
+    padding: 0.4rem 1.2rem;
+    margin: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .geminiIcon {
+      width: 20px;
+      height: 20px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .loading {
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  .geminiButton:hover {
+    color: black;
+  }
+
+  .disabledGeminiButton {
+    pointer-events: none;
+    opacity: 0.6;
+    color: gray;
   }
 }
 
@@ -164,6 +204,9 @@ div.modalContainer {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
+  outline: none;
 }
 
 .buttonsContainer {

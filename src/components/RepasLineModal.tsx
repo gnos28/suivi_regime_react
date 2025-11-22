@@ -1,11 +1,138 @@
 import { useEffect, useState } from "react";
 import styles from "./RepasLineModal.module.scss";
+import buttonStyles from "../styles/button.module.scss";
 import modalStyles from "../styles/modal.module.scss";
 import levenshtein from "fast-levenshtein";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
 import { globales, type DatabaseColName } from "../types/globales";
 import { calcDonutGroups } from "../utils/calcDonutGroups";
 import type { DatabaseExtended } from "../types/databaseExtended";
+import NutrimentItem from "./NutrimentItem";
+
+type NutrimentsResumeProps = {
+  nutrimentsResume: DatabaseExtended | null;
+  donutGroups: {
+    name: DatabaseColName;
+    nameAbbr: string;
+    colorValue: string;
+    unitDecimals: number;
+    unit: string;
+  }[];
+  editedContent: string;
+};
+
+const NutrimentsResume = ({
+  nutrimentsResume,
+  donutGroups,
+  editedContent,
+}: NutrimentsResumeProps) => {
+  const { handleAddToDatabase } = useSuiviRegime();
+  const [loadingGemini, setLoadingGemini] = useState(false);
+
+  const handleRequestGemini = async () => {
+    if (loadingGemini) return;
+    setLoadingGemini(true);
+    await handleAddToDatabase(editedContent);
+    setLoadingGemini(false);
+  };
+
+  return (
+    <div
+      className={styles.nutrimentsSection}
+      style={{
+        overflowX: nutrimentsResume === null ? "hidden" : "scroll",
+      }}
+    >
+      {nutrimentsResume ? (
+        <div className={styles.nutrimentsContainer}>
+          {globales.databaseColNames
+            .filter((colName) => colName !== "aliment")
+            .filter((colName) => {
+              const value = nutrimentsResume[colName];
+              return (
+                value !== undefined &&
+                value !== null &&
+                value !== "" &&
+                value !== 0
+              );
+            })
+            .filter((colName) => {
+              const calcVsAverage = () => {
+                if (colName === "Calories") return true;
+
+                const nutrimentVsAverage =
+                  nutrimentsResume.nutrimentVsAverage[colName];
+
+                if (nutrimentVsAverage > 0.25) return true;
+                return false;
+              };
+
+              const calcCalorieVsAverage = () => {
+                if (
+                  colName === "Calories" ||
+                  colName === "soluble / insoluble" ||
+                  colName === "Ω3 / Ω6"
+                )
+                  return true;
+
+                const nutrimentByCalorieVsAverage =
+                  nutrimentsResume.nutrimentByCalorieVsAverage[colName];
+
+                if (colName === "Calcium")
+                  console.log({ nutrimentByCalorieVsAverage });
+
+                if (nutrimentByCalorieVsAverage > 0.8) return true;
+                return false;
+              };
+
+              const vsAverage = calcVsAverage();
+              const CalorieVsAverage = calcCalorieVsAverage();
+
+              return vsAverage && CalorieVsAverage;
+            })
+            .map((colName) => (
+              <NutrimentItem
+                key={colName}
+                colName={colName}
+                nutrimentsResume={nutrimentsResume}
+                donutGroups={donutGroups}
+              />
+            ))}
+        </div>
+      ) : (
+        <div
+          className={[styles.nutrimentsContainer, styles.noNutriments].join(
+            " "
+          )}
+        >
+          {editedContent.trim().length === 0 ? null : (
+            <>
+              <span>Aucune information nutritionnelle disponible</span>
+              <div
+                className={[
+                  styles.geminiButton,
+                  buttonStyles.btnGrad,
+                  loadingGemini ? styles.disabledGeminiButton : "",
+                ].join(" ")}
+                onClick={handleRequestGemini}
+              >
+                Demander à Gemini ?
+                <img
+                  src="/gemini256.webp"
+                  alt="gemini"
+                  className={[
+                    styles.geminiIcon,
+                    loadingGemini ? styles.loading : "",
+                  ].join(" ")}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -34,7 +161,7 @@ const RepasLineModal = ({
     useState<DatabaseExtended | null>(null);
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedContent(e.target.value);
+    setEditedContent(e.target.value.replace(/\n/g, ""));
     if (selectedTab !== "autocompletion") setSelectedTab("autocompletion");
   };
 
@@ -43,40 +170,6 @@ const RepasLineModal = ({
     selectedSuiviDay,
     targets,
   }).flat();
-
-  const NutrimentItem = ({ colName }: { colName: DatabaseColName }) => {
-    if (!nutrimentsResume) return null;
-
-    const donutGroupItem = donutGroups.find((item) => item.name === colName);
-
-    const valueFormatted = (value: number | string) => {
-      if (!donutGroupItem) return value;
-
-      if (
-        typeof value === "number" &&
-        donutGroupItem.unitDecimals !== undefined
-      ) {
-        return value.toFixed(donutGroupItem.unitDecimals);
-      }
-
-      return value;
-    };
-
-    const backgroundColor = donutGroupItem?.colorValue ?? "transparent";
-    const name = donutGroupItem?.nameAbbr ?? colName;
-    const value = valueFormatted(nutrimentsResume[colName] ?? "N/A");
-
-    return (
-      <div
-        key={colName}
-        className={styles.nutrimentItem}
-        style={{ backgroundColor }}
-      >
-        <span>{name}</span>
-        <span>{value}</span>
-      </div>
-    );
-  };
 
   useEffect(() => {
     const calcMostUsedAliments = () => {
@@ -125,18 +218,26 @@ const RepasLineModal = ({
         ),
       ]
         .map((name) => {
-          const includesEditedContent = name
+          const includesEditedContentScore = editedContent
             .toLowerCase()
-            .includes(editedContent.toLowerCase());
+            .split(/[^a-z]/)
+            .filter((str) => str.length > 2)
+            .reduce((acc, curr) => {
+              const score = name.toLowerCase().includes(curr) ? 100 : 0;
+
+              return acc + score;
+            }, 0);
 
           return {
             line: name,
             distance:
-              (includesEditedContent ? -20 : 0) +
-              levenshtein.get(editedContent.toLowerCase(), name.toLowerCase()),
+              levenshtein.get(editedContent.toLowerCase(), name.toLowerCase()) -
+              includesEditedContentScore,
           };
         })
         .sort((a, b) => a.distance - b.distance);
+
+      console.log({ distances });
 
       const topAutocompletion = distances
         .filter((item) => item.distance <= 15)
@@ -231,7 +332,7 @@ const RepasLineModal = ({
           {selectedTab === "autocompletion" && (
             <div className={styles.suggestionsContainer}>
               <div>
-                {autocompletion.slice(0, 7).map((autocompletion, index) => (
+                {autocompletion.slice(0, 10).map((autocompletion, index) => (
                   <div
                     key={index}
                     className={[
@@ -249,65 +350,11 @@ const RepasLineModal = ({
             </div>
           )}
         </div>
-
-        <div className={styles.nutrimentsSection}>
-          {nutrimentsResume ? (
-            <div className={styles.nutrimentsContainer}>
-              {globales.databaseColNames
-                .filter((colName) => colName !== "aliment")
-                .filter((colName) => {
-                  const value = nutrimentsResume[colName];
-                  return (
-                    value !== undefined &&
-                    value !== null &&
-                    value !== "" &&
-                    value !== 0
-                  );
-                })
-                .filter((colName) => {
-                  const calcVsAverage = () => {
-                    if (colName === "Calories") return true;
-
-                    const nutrimentVsAverage =
-                      nutrimentsResume.nutrimentVsAverage[colName];
-
-                    if (nutrimentVsAverage > 0.25) return true;
-                    return false;
-                  };
-
-                  const calcCalorieVsAverage = () => {
-                    if (
-                      colName === "Calories" ||
-                      colName === "soluble / insoluble" ||
-                      colName === "Ω3 / Ω6"
-                    )
-                      return true;
-
-                    const nutrimentByCalorieVsAverage =
-                      nutrimentsResume.nutrimentByCalorieVsAverage[colName];
-
-                    if (colName === "Calcium")
-                      console.log({ nutrimentByCalorieVsAverage });
-
-                    if (nutrimentByCalorieVsAverage > 0.8) return true;
-                    return false;
-                  };
-
-                  const vsAverage = calcVsAverage();
-                  const CalorieVsAverage = calcCalorieVsAverage();
-
-                  return vsAverage && CalorieVsAverage;
-                })
-                .map((colName) => (
-                  <NutrimentItem key={colName} colName={colName} />
-                ))}
-            </div>
-          ) : (
-            <div className={styles.nutrimentsContainer}>
-              <h3>Aucune information nutritionnelle disponible</h3>
-            </div>
-          )}
-        </div>
+        <NutrimentsResume
+          nutrimentsResume={nutrimentsResume}
+          donutGroups={donutGroups}
+          editedContent={editedContent}
+        />
 
         <div className={styles.editContainer}>
           <textarea

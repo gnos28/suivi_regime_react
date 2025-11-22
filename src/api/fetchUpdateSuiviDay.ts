@@ -43,8 +43,6 @@ export const fetchUpdateSuiviDay = async ({
 
   console.log({ response });
 
-  if (response.status === 200) return "OK";
-
   handleApiAnswer({
     callback: () => "OK",
     response,

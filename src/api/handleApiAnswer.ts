@@ -15,7 +15,7 @@ export const handleApiAnswer = ({
     response.status === 200 &&
     response.data.toString() !== "ERROR Invalid password"
   ) {
-    callback();
+    return callback();
   } else {
     setInvalidPassword(true);
     // throw new Error("Invalid password");

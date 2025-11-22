@@ -20,6 +20,7 @@ import type {
   AverageNutrimentByCalorie,
   DatabaseExtended,
 } from "../types/databaseExtended";
+import { fetchAddToDatabase } from "../api/fetchAddToDatabase";
 
 const secureParseFloat = (value: string | number | undefined) => {
   if (value === undefined || value === null) return 0;
@@ -203,6 +204,20 @@ export const useSuiviRegime = () => {
     });
   };
 
+  const handleAddToDatabase = async (aliment: string) => {
+    const newAliment = await fetchAddToDatabase({
+      setInvalidPassword,
+      payload: { aliment },
+    });
+
+    if (newAliment === undefined) return;
+
+    const updatedDatabase = [...database, newAliment];
+    setDatabase(updatedDatabase);
+
+    return newAliment;
+  };
+
   useEffect(() => {
     const newAverageNutriment: AverageNutriment = Object.fromEntries(
       globales.nutrimentsColNames.map((nutriment) => {
@@ -340,5 +355,6 @@ export const useSuiviRegime = () => {
     isLoading,
     goToPreviousDay,
     goToNextDay,
+    handleAddToDatabase,
   };
 };
