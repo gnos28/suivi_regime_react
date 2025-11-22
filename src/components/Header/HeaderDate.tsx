@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
-import { globales } from "../types/globales";
-import Donut from "./Donut";
-import { useSuiviRegime } from "../hooks/useSuiviRegime";
-import { calcDonutGroups } from "../utils/calcDonutGroups";
-import DonutGroupIndexContext from "../contexts/donutGroupIndexContext";
+import { globales } from "../../types/globales";
+import Donut from "../SuiviDay/Donut";
+import { useSuiviRegime } from "../../hooks/useSuiviRegime";
+import { calcDonutGroups } from "../../utils/calcDonutGroups";
+import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
 
 const Carence = ({ nutriment }: { nutriment: string }) => {
   return (

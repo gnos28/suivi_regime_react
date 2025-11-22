@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useContext, useEffect } from "react";
 import styles from "./App.module.scss";
-import SuiviDay from "./components/SuiviDay";
-import HeaderDate from "./components/HeaderDate";
-import NavBar from "./components/NavBar";
+import SuiviDay from "./components/SuiviDay/SuiviDay";
+import HeaderDate from "./components/Header/HeaderDate";
+import NavBar from "./components/NavBar/NavBar";
 import { useSuiviRegime } from "./hooks/useSuiviRegime";
 import LoadingRing from "./components/LoadingRing";
 import PasswordContext from "./contexts/passwordContext";

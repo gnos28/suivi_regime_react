@@ -1,5 +1,5 @@
-import type { DatabaseExtended } from "../types/databaseExtended";
-import type { DatabaseColName } from "../types/globales";
+import type { DatabaseExtended } from "../../types/databaseExtended";
+import type { DatabaseColName } from "../../types/globales";
 import styles from "./NutrimentItem.module.scss";
 
 type NutrimentItemProps = {
@@ -49,8 +49,6 @@ const NutrimentItem = ({
       nutrimentsResume.nutrimentByCalorieVsAverage[colName];
 
     const grayscaleValue = 1 - Math.min(1, nutrimentByCalorieVsAverage);
-
-    console.log({ colName, nutrimentByCalorieVsAverage, grayscaleValue });
 
     return grayscaleValue;
   };

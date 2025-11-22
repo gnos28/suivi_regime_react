@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./EditRepasLine.module.scss";
-import buttonStyles from "../styles/button.module.scss";
-import RepasLineModal from "./RepasLineModal";
-import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import buttonStyles from "../../styles/button.module.scss";
+import RepasLineModal from "../RepasLineModal/RepasLineModal";
+import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 
 type EditRepasLineProps = {
   line: string;

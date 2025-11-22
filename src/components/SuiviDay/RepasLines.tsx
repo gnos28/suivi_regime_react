@@ -1,6 +1,6 @@
 import EditRepasLine from "./EditRepasLine";
 import styles from "./RepasLines.module.scss";
-import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 
 type RepasLinesProps = {
   splitText: string[];

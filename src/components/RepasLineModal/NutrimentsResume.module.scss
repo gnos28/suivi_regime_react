@@ -1,0 +1,92 @@
+.nutrimentsSection {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  overflow-x: scroll;
+}
+
+.nutrimentsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  // overflow-x: auto;
+  gap: 0.2rem;
+  width: auto;
+  height: auto;
+  // border: 1px solid green;
+
+  & > span {
+    font-size: 0.9rem;
+    color: #333;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.noNutriments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  overflow-x: hidden;
+
+  & > span {
+    width: 100%;
+    text-align: center;
+    // font-size: 0.85rem;
+    color: #555;
+  }
+
+  .geminiButton {
+    width: 80%;
+    padding: 0.4rem 1.2rem;
+    margin: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .geminiIcon {
+      width: 20px;
+      height: 20px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .loading {
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  .geminiButton:hover {
+    color: black;
+  }
+
+  .disabledGeminiButton {
+    pointer-events: none;
+    opacity: 0.6;
+    color: gray;
+  }
+}

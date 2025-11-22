@@ -1,14 +1,14 @@
 import styles from "./RepasSection.module.scss";
-import buttonStyles from "../styles/button.module.scss";
+import buttonStyles from "../../styles/button.module.scss";
 import RepasLines from "./RepasLines";
 import { useContext, useState } from "react";
-import { calcColumnTotal } from "../utils/calcColumnTotal";
-import RepasLineModal from "./RepasLineModal";
-import { calcColumnAverage } from "../utils/calcColumnAverage";
-import type { DatabaseColName } from "../types/globales";
-import { useSuiviRegime } from "../hooks/useSuiviRegime";
-import DonutGroupIndexContext from "../contexts/donutGroupIndexContext";
-import { calcDonutGroups } from "../utils/calcDonutGroups";
+import { calcColumnTotal } from "../../utils/calcColumnTotal";
+import RepasLineModal from "../RepasLineModal/RepasLineModal";
+import { calcColumnAverage } from "../../utils/calcColumnAverage";
+import type { DatabaseColName } from "../../types/globales";
+import { useSuiviRegime } from "../../hooks/useSuiviRegime";
+import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
+import { calcDonutGroups } from "../../utils/calcDonutGroups";
 
 type AverageBarProps = {
   columnName: DatabaseColName;

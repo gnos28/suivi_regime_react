@@ -1,5 +1,5 @@
 import styles from "./NavBar.module.scss";
-import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 
 const foodEmojis = [
   "🥖",
