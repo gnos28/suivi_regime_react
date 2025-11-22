@@ -3,6 +3,9 @@ import styles from "./RepasLineModal.module.scss";
 import modalStyles from "../styles/modal.module.scss";
 import levenshtein from "fast-levenshtein";
 import { useSuiviRegime } from "../hooks/useSuiviRegime";
+import { globales, type DatabaseColName } from "../types/globales";
+import { calcDonutGroups } from "../utils/calcDonutGroups";
+import type { DatabaseExtended } from "../types/databaseExtended";
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -20,9 +23,60 @@ const RepasLineModal = ({
   dayTimeCol,
 }: RepasLineModalProps) => {
   const [editedContent, setEditedContent] = useState(content);
-  const { database, suiviDays } = useSuiviRegime();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const { databaseExtended, suiviDays, selectedSuiviDay, targets } =
+    useSuiviRegime();
+  const [autocompletion, setAutocompletion] = useState<string[]>([]);
   const [mostUsedAliments, setMostUsedAliments] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<
+    "habitudes" | "autocompletion" | "suggestions"
+  >("habitudes");
+  const [nutrimentsResume, setNutrimentsResume] =
+    useState<DatabaseExtended | null>(null);
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedContent(e.target.value);
+    if (selectedTab !== "autocompletion") setSelectedTab("autocompletion");
+  };
+
+  const donutGroups = calcDonutGroups({
+    database: databaseExtended,
+    selectedSuiviDay,
+    targets,
+  }).flat();
+
+  const NutrimentItem = ({ colName }: { colName: DatabaseColName }) => {
+    if (!nutrimentsResume) return null;
+
+    const donutGroupItem = donutGroups.find((item) => item.name === colName);
+
+    const valueFormatted = (value: number | string) => {
+      if (!donutGroupItem) return value;
+
+      if (
+        typeof value === "number" &&
+        donutGroupItem.unitDecimals !== undefined
+      ) {
+        return value.toFixed(donutGroupItem.unitDecimals);
+      }
+
+      return value;
+    };
+
+    const backgroundColor = donutGroupItem?.colorValue ?? "transparent";
+    const name = donutGroupItem?.nameAbbr ?? colName;
+    const value = valueFormatted(nutrimentsResume[colName] ?? "N/A");
+
+    return (
+      <div
+        key={colName}
+        className={styles.nutrimentItem}
+        style={{ backgroundColor }}
+      >
+        <span>{name}</span>
+        <span>{value}</span>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const calcMostUsedAliments = () => {
@@ -55,15 +109,17 @@ const RepasLineModal = ({
   }, [suiviDays, dayTimeCol]);
 
   useEffect(() => {
-    const computeSuggestions = () => {
+    const computeAutocompletion = () => {
+      console.log("computeAutocompletion for:", editedContent);
+
       if (editedContent.trim().length === 0) {
-        setSuggestions([]);
+        setAutocompletion([]);
         return;
       }
 
       const distances: { line: string; distance: number }[] = [
         ...new Set(
-          database
+          databaseExtended
             .map((item) => item.aliment.toString())
             .filter((name) => name.length > 0 && name !== "-")
         ),
@@ -82,15 +138,35 @@ const RepasLineModal = ({
         })
         .sort((a, b) => a.distance - b.distance);
 
-      const topSuggestions = distances
+      const topAutocompletion = distances
         .filter((item) => item.distance <= 15)
         .map((item) => item.line);
 
-      setSuggestions(topSuggestions);
+      console.log({ topAutocompletion });
+
+      setAutocompletion(topAutocompletion);
     };
 
-    computeSuggestions();
-  }, [editedContent, database]);
+    const updateNutrimentsResume = () => {
+      const foundItem = databaseExtended.find(
+        (item) =>
+          item.aliment.toString().toLowerCase() ===
+          editedContent.trim().toLowerCase()
+      );
+
+      console.log({ foundItem });
+
+      if (foundItem) {
+        setNutrimentsResume(foundItem);
+      } else {
+        setNutrimentsResume(null);
+      }
+    };
+
+    updateNutrimentsResume();
+
+    computeAutocompletion();
+  }, [editedContent, databaseExtended]);
 
   return (
     <div
@@ -107,40 +183,138 @@ const RepasLineModal = ({
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.suggestionsContainer}>
-          <h2>Mes habitudes</h2>
-          <div>
-            {mostUsedAliments.slice(0, 7).map((suggestion, index) => (
-              <div
-                key={index}
-                className={styles.suggestionItem}
-                onClick={() => setEditedContent(suggestion)}
-              >
-                {suggestion}
-              </div>
-            ))}
+        <div className={styles.suggestionsSection}>
+          <div className={styles.tabSelector}>
+            <h2
+              className={selectedTab === "habitudes" ? styles.selectedTab : ""}
+              onClick={() => setSelectedTab("habitudes")}
+            >
+              Mes habitudes
+            </h2>
+            <h2
+              className={
+                selectedTab === "autocompletion" ? styles.selectedTab : ""
+              }
+              onClick={() => setSelectedTab("autocompletion")}
+            >
+              Autocompletion
+            </h2>
+            <h2
+              className={
+                selectedTab === "suggestions" ? styles.selectedTab : ""
+              }
+              onClick={() => setSelectedTab("suggestions")}
+            >
+              Suggestions
+            </h2>
           </div>
-        </div>
-        <div className={styles.suggestionsContainer}>
-          <h2>Suggestions</h2>
-          <div>
-            {suggestions.slice(0, 7).map((suggestion, index) => (
-              <div
-                key={index}
-                className={styles.suggestionItem}
-                onClick={() => setEditedContent(suggestion)}
-              >
-                {suggestion}
+          {selectedTab === "habitudes" && (
+            <div className={styles.suggestionsContainer}>
+              <div>
+                {mostUsedAliments.slice(0, 7).map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className={[
+                      styles.suggestionItem,
+                      suggestion === editedContent
+                        ? styles.selectedSuggestion
+                        : "",
+                    ].join(" ")}
+                    onClick={() => setEditedContent(suggestion)}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+          {selectedTab === "autocompletion" && (
+            <div className={styles.suggestionsContainer}>
+              <div>
+                {autocompletion.slice(0, 7).map((autocompletion, index) => (
+                  <div
+                    key={index}
+                    className={[
+                      styles.suggestionItem,
+                      autocompletion === editedContent
+                        ? styles.selectedSuggestion
+                        : "",
+                    ].join(" ")}
+                    onClick={() => setEditedContent(autocompletion)}
+                  >
+                    {autocompletion}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
+
+        <div className={styles.nutrimentsSection}>
+          {nutrimentsResume ? (
+            <div className={styles.nutrimentsContainer}>
+              {globales.databaseColNames
+                .filter((colName) => colName !== "aliment")
+                .filter((colName) => {
+                  const value = nutrimentsResume[colName];
+                  return (
+                    value !== undefined &&
+                    value !== null &&
+                    value !== "" &&
+                    value !== 0
+                  );
+                })
+                .filter((colName) => {
+                  const calcVsAverage = () => {
+                    if (colName === "Calories") return true;
+
+                    const nutrimentVsAverage =
+                      nutrimentsResume.nutrimentVsAverage[colName];
+
+                    if (nutrimentVsAverage > 0.25) return true;
+                    return false;
+                  };
+
+                  const calcCalorieVsAverage = () => {
+                    if (
+                      colName === "Calories" ||
+                      colName === "soluble / insoluble" ||
+                      colName === "Ω3 / Ω6"
+                    )
+                      return true;
+
+                    const nutrimentByCalorieVsAverage =
+                      nutrimentsResume.nutrimentByCalorieVsAverage[colName];
+
+                    if (colName === "Calcium")
+                      console.log({ nutrimentByCalorieVsAverage });
+
+                    if (nutrimentByCalorieVsAverage > 0.8) return true;
+                    return false;
+                  };
+
+                  const vsAverage = calcVsAverage();
+                  const CalorieVsAverage = calcCalorieVsAverage();
+
+                  return vsAverage && CalorieVsAverage;
+                })
+                .map((colName) => (
+                  <NutrimentItem key={colName} colName={colName} />
+                ))}
+            </div>
+          ) : (
+            <div className={styles.nutrimentsContainer}>
+              <h3>Aucune information nutritionnelle disponible</h3>
+            </div>
+          )}
+        </div>
+
         <div className={styles.editContainer}>
           <textarea
             name="editedContent"
             id="editedContent"
             value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
+            onChange={handleTextareaChange}
             className={styles.modalInput}
             rows={4}
           >

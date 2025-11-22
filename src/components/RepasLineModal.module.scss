@@ -1,26 +1,163 @@
-.modalContainer {
+div.modalContainer {
   // display: flex;
   // flex-direction: column;
   // justify-content: space-between;
   // align-items: center;
   // height: 80vh;
+  // border: 1px solid red;
+  // padding: 0;
+  // flex-grow: 1;
+  position: relative;
+  gap: 0;
 }
 
-.editContainer {
+.suggestionsSection {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  height: 30%;
+  // border-bottom: 1px solid #ccc;
+  margin-bottom: 1rem;
+  // border: 1px solid red;
+}
+
+.tabSelector {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 100%;
+  // margin: -10px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  & > h2 {
+    margin: 0;
+    padding: 0.5rem 0.8rem;
+    font-size: 12px;
+    font-weight: normal;
+    cursor: pointer;
+    color: #555;
+    border-radius: 4px;
+  }
+
+  & > h2.selectedTab {
+    font-weight: bold;
+    background-color: #f0f0f0;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  }
+}
+
+.suggestionsContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  gap: 0.2rem;
+  border-top: none;
+  width: 100%;
+  height: auto;
+  overflow-y: scroll;
+  flex-grow: 1;
+  flex-shrink: 1;
+  // height: calc(50% - 1rem);
+  // max-height: calc(50% - 1rem);
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    // overflow-y: scroll;
+  }
+}
+
+.suggestionItem {
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  color: black;
+  // background-color: #f0f0f0;
+  background: linear-gradient(90deg, #e0e0e0, #fff);
+}
+.suggestionItem:hover {
+  background-color: #d0d0d0;
+}
+
+.selectedSuggestion {
+  font-weight: bold;
+}
+
+.nutrimentsSection {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  overflow-x: scroll;
+}
+
+.nutrimentsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  // overflow-x: auto;
+  gap: 0.2rem;
+  width: auto;
+  height: auto;
+  // border: 1px solid green;
+
+  & > span {
+    font-size: 0.9rem;
+    color: #333;
+  }
+}
+
+.nutrimentItem {
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 55px;
+  width: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  gap: 0.2rem;
+  background-color: #b5b5b5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+
+  & > span:first-child {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  & > span:last-child {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+  }
+}
+
+.editContainer {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // justify-content: flex-end;
   // flex-grow: 1;
   gap: 1rem;
   width: 100%;
-  min-height: 34%;
-  height: 34%;
+  // min-height: 34%;
+  height: 160px;
   overflow-y: auto;
 }
 
 .modalInput {
-  width: calc(100% - 1.5rem);
+  width: calc(100% - 1.2rem);
   //   height: 100%;
   font-size: 1rem;
   padding: 0.5rem;
@@ -62,40 +199,4 @@
 }
 .cancelButton:hover {
   background-color: #e07c86;
-}
-
-.suggestionsContainer {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  gap: 0.2rem;
-  //   border: 1px solid #ccc;
-  border-top: none;
-  width: 100%;
-  height: calc(33% - 1rem);
-  max-height: calc(33% - 1rem);
-  //   max-height: 150px;
-  //   overflow-y: auto;
-  & > h2 {
-    margin: 0.5rem;
-    font-size: 1rem;
-    color: #333;
-  }
-
-  & > div {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    overflow-y: scroll;
-  }
-}
-
-.suggestionItem {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  color: black;
-  background-color: #f0f0f0;
-}
-.suggestionItem:hover {
-  background-color: #d0d0d0;
 }

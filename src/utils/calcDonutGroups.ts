@@ -111,18 +111,21 @@ export const calcDonutGroups = ({
 
   type donutGroupItem = {
     name: DatabaseColName;
+    nameAbbr: string;
     colorValue: string;
     colorTarget: string;
     value: number;
     target: number;
     textLines: string[];
     unit: string;
+    unitDecimals: number;
   };
 
   const donutGroups: donutGroupItem[][] = [
     [
       {
         name: "Calories",
+        nameAbbr: "Cal",
         colorValue: "rgba(44, 44, 44, 0.2)",
         colorTarget: "rgba(172, 172, 172, 0.2)",
         value: calcColumnTotalDay("Calories"),
@@ -134,9 +137,11 @@ export const calcDonutGroups = ({
           )} / ${targetCalories} kcal`,
         ],
         unit: "kcal",
+        unitDecimals: 0,
       },
       {
         name: "Proteines",
+        nameAbbr: "Prot",
         colorValue: "rgba(70, 92, 255, 0.2)",
         colorTarget: "rgba(167, 178, 255, 0.2)",
         value: calcColumnTotalDay("Proteines"),
@@ -148,9 +153,11 @@ export const calcDonutGroups = ({
           )} / ${targetProteines} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
       {
         name: "Lipides",
+        nameAbbr: "Lip",
         colorValue: "rgba(255, 217, 45, 0.35)",
         colorTarget: "rgba(255, 233, 161, 0.2)",
         value: calcColumnTotalDay("Lipides"),
@@ -160,9 +167,11 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Lipides").toFixed(1)} / ${targetLipides} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
       {
         name: "Glucides",
+        nameAbbr: "Gluc",
         colorValue: "rgba(235, 54, 54, 0.2)",
         colorTarget: "rgba(255, 192, 192, 0.2)",
         value: calcColumnTotalDay("Glucides"),
@@ -172,11 +181,13 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Glucides").toFixed(1)} / ${targetGlucides} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
     ],
     [
       {
         name: "fibre solubles",
+        nameAbbr: "FibSol",
         colorValue: "rgba(34, 139, 34, 0.2)",
         colorTarget: "rgba(144, 238, 144, 0.2)",
         value: calcColumnTotalDay("fibre solubles"),
@@ -188,9 +199,11 @@ export const calcDonutGroups = ({
           )} / ${targetFibresSolubles.toFixed(1)} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
       {
         name: "fibres insolubles",
+        nameAbbr: "FibInsol",
         colorValue: "rgba(100, 43, 0, 0.33)",
         colorTarget: "rgba(219, 82, 33, 0.33)",
         value: calcColumnTotalDay("fibres insolubles"),
@@ -202,9 +215,11 @@ export const calcDonutGroups = ({
           )} / ${targetFibresInsolubles.toFixed(1)} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
       {
         name: "fibre total",
+        nameAbbr: "FibTot",
         colorValue: "rgba(135, 139, 34, 0.2)",
         colorTarget: "rgba(238, 233, 144, 0.2)",
         value: calcColumnTotalDay("fibre total"),
@@ -216,9 +231,11 @@ export const calcDonutGroups = ({
           )} / ${targetFibresTotal.toFixed(0)} g`,
         ],
         unit: "g",
+        unitDecimals: 1,
       },
       {
         name: "soluble / insoluble",
+        nameAbbr: "Sol/Insol",
         colorValue: "rgba(60, 179, 113, 0.2)",
         colorTarget: "rgba(152, 251, 152, 0.2)",
         value:
@@ -233,11 +250,13 @@ export const calcDonutGroups = ({
           ).toFixed(2)} / ${targetFibresSolubleInsolubleRatio}`,
         ],
         unit: "",
+        unitDecimals: 2,
       },
     ],
     [
       {
         name: "Sodium",
+        nameAbbr: "Sod",
         colorValue: "rgba(255, 69, 0, 0.2)",
         colorTarget: "rgba(255, 160, 122, 0.2)",
         value: calcColumnTotalDay("Sodium"),
@@ -247,9 +266,11 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Sodium").toFixed(0)} / ${targetSodium} mg`,
         ],
         unit: "mg",
+        unitDecimals: 0,
       },
       {
         name: "Potassium",
+        nameAbbr: "Pot",
         colorValue: "rgba(30, 144, 255, 0.2)",
         colorTarget: "rgba(135, 206, 250, 0.2)",
         value: calcColumnTotalDay("Potassium"),
@@ -261,9 +282,11 @@ export const calcDonutGroups = ({
           )} / ${targetPotassium} mg`,
         ],
         unit: "mg",
+        unitDecimals: 0,
       },
       {
         name: "Calcium",
+        nameAbbr: "Ca",
         colorValue: "rgba(100, 149, 237, 0.2)",
         colorTarget: "rgba(173, 216, 230, 0.2)",
         value: calcColumnTotalDay("Calcium"),
@@ -273,11 +296,13 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Calcium").toFixed(0)} / ${targetCalcium} mg`,
         ],
         unit: "mg",
+        unitDecimals: 0,
       },
     ],
     [
       {
         name: "Magnésium",
+        nameAbbr: "Mg",
         colorValue: "rgba(72, 61, 139, 0.2)",
         colorTarget: "rgba(216, 191, 216, 0.2)",
         value: calcColumnTotalDay("Magnésium"),
@@ -289,9 +314,11 @@ export const calcDonutGroups = ({
           )} / ${targetMagnesium} mg`,
         ],
         unit: "mg",
+        unitDecimals: 0,
       },
       {
         name: "Fer",
+        nameAbbr: "Fe",
         colorValue: "rgba(178, 34, 34, 0.2)",
         colorTarget: "rgba(255, 182, 193, 0.2)",
         value: calcColumnTotalDay("Fer"),
@@ -301,9 +328,11 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Fer").toFixed(1)} / ${targetFer} mg`,
         ],
         unit: "mg",
+        unitDecimals: 1,
       },
       {
         name: "Zinc",
+        nameAbbr: "Zn",
         colorValue: "rgba(205, 133, 63, 0.2)",
         colorTarget: "rgba(244, 164, 96, 0.2)",
         value: calcColumnTotalDay("Zinc"),
@@ -313,11 +342,13 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Zinc").toFixed(1)} / ${targetZinc} mg`,
         ],
         unit: "mg",
+        unitDecimals: 1,
       },
     ],
     [
       {
         name: "Vitamine D",
+        nameAbbr: "Vit D",
         colorValue: "rgba(218, 165, 32, 0.2)",
         colorTarget: "rgba(255, 215, 0, 0.2)",
         value: calcColumnTotalDay("Vitamine D"),
@@ -329,9 +360,11 @@ export const calcDonutGroups = ({
           )} / ${targetVitamineD} µg`,
         ],
         unit: "µg",
+        unitDecimals: 1,
       },
       {
         name: "Vitamine B9",
+        nameAbbr: "Vit B9",
         colorValue: "rgba(123, 104, 238, 0.2)",
         colorTarget: "rgba(216, 191, 216, 0.2)",
         value: calcColumnTotalDay("Vitamine B9"),
@@ -343,9 +376,11 @@ export const calcDonutGroups = ({
           )} / ${targetVitamineB9} µg`,
         ],
         unit: "µg",
+        unitDecimals: 1,
       },
       {
         name: "Vitamine B12",
+        nameAbbr: "Vit B12",
         colorValue: "rgba(199, 21, 133, 0.2)",
         colorTarget: "rgba(255, 182, 193, 0.2)",
         value: calcColumnTotalDay("Vitamine B12"),
@@ -357,9 +392,11 @@ export const calcDonutGroups = ({
           )} / ${targetVitamineB12} µg`,
         ],
         unit: "µg",
+        unitDecimals: 1,
       },
       {
         name: "Vitamine C",
+        nameAbbr: "Vit C",
         colorValue: "rgba(50, 205, 50, 0.2)",
         colorTarget: "rgba(144, 238, 144, 0.2)",
         value: calcColumnTotalDay("Vitamine C"),
@@ -371,11 +408,13 @@ export const calcDonutGroups = ({
           )} / ${targetVitamineC} mg`,
         ],
         unit: "mg",
+        unitDecimals: 1,
       },
     ],
     [
       {
         name: "Oméga-3",
+        nameAbbr: "Ω3",
         colorValue: "rgba(0, 191, 255, 0.2)",
         colorTarget: "rgba(135, 206, 250, 0.2)",
         value: calcColumnTotalDay("Oméga-3"),
@@ -385,9 +424,11 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Oméga-3").toFixed(1)} / ${targetOmega3} mg`,
         ],
         unit: "mg",
+        unitDecimals: 1,
       },
       {
         name: "Oméga-6",
+        nameAbbr: "Ω6",
         colorValue: "rgba(255, 140, 0, 0.2)",
         colorTarget: "rgba(255, 218, 185, 0.2)",
         value: calcColumnTotalDay("Oméga-6"),
@@ -397,9 +438,11 @@ export const calcDonutGroups = ({
           `${calcColumnTotalDay("Oméga-6").toFixed(1)} / ${targetOmega6} mg`,
         ],
         unit: "mg",
+        unitDecimals: 1,
       },
       {
         name: "Ω3 / Ω6",
+        nameAbbr: "Ω3/Ω6",
         colorValue: "rgba(72, 209, 204, 0.2)",
         colorTarget: "rgba(175, 238, 238, 0.2)",
         value:
@@ -412,6 +455,7 @@ export const calcDonutGroups = ({
           ).toFixed(2)} / ${targetOmega3Omega6Ratio}`,
         ],
         unit: "",
+        unitDecimals: 2,
       },
     ],
   ];
