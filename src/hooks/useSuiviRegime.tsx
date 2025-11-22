@@ -35,7 +35,6 @@ export const useSuiviRegime = () => {
   const refreshAllData = async (props?: { callGemini: boolean }) => {
     if (isLoading) return;
     setIsLoading(true);
-    console.log("*** hook useEffect");
 
     try {
       if (props?.callGemini) await fetchRefresh({ setInvalidPassword });

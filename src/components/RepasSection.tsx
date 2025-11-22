@@ -95,7 +95,7 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
       ? "/midi.webp"
       : dayTimeCol === "goûter"
       ? "/aprem.webp"
-      : "/soir3.webp";
+      : "/soir.webp";
 
   const splitText = (selectedSuiviDay?.[dayTimeCol] ?? "")
     .toString()
@@ -137,6 +137,7 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
         >
           {donutGroups[donutGroupIndex]?.map((nutrient) => (
             <AverageBar
+              key={nutrient.name}
               columnName={nutrient.name}
               calcColumnTotalPeriod={calcColumnTotalPeriod}
               calcColumnAveragePeriod={calcColumnAveragePeriod}

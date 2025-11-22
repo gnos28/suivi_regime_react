@@ -26,9 +26,6 @@ function App() {
 
   useEffect(() => {
     if (password && password.trim() !== "" && !isLoading) {
-      console.log("*** app useEffect");
-      console.log({ password, isLoading });
-
       try {
         refreshAllData();
         setInvalidPassword(false);
