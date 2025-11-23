@@ -1,20 +1,27 @@
 import levenshtein from "fast-levenshtein";
 import { useEffect, useState } from "react";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
-import styles from "./RepasLineModal.module.scss";
+import styles from "./Autocompletion.module.scss";
 
 type AutocompletionProps = {
   editedContent: string;
   setEditedContent: (content: string) => void;
+  closeAutocompletion: () => void;
 };
 
 const Autocompletion = ({
   editedContent,
   setEditedContent,
+  closeAutocompletion,
 }: AutocompletionProps) => {
   const [autocompletion, setAutocompletion] = useState<string[]>([]);
 
   const { databaseExtended } = useSuiviRegime();
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setEditedContent(suggestion);
+    closeAutocompletion();
+  };
 
   useEffect(() => {
     const computeAutocompletion = () => {
@@ -61,22 +68,34 @@ const Autocompletion = ({
   }, [editedContent, databaseExtended]);
 
   return (
-    <div className={styles.suggestionsContainer}>
-      <div>
-        {autocompletion.slice(0, 10).map((autocompletion, index) => (
-          <div
-            key={index}
-            className={[
-              styles.suggestionItem,
-              autocompletion === editedContent ? styles.selectedSuggestion : "",
-            ].join(" ")}
-            onClick={() => setEditedContent(autocompletion)}
-          >
-            {autocompletion}
-          </div>
-        ))}
+    <>
+      <div className={styles.overtopMask} onClick={closeAutocompletion} />
+      <div className={styles.topMask} onClick={closeAutocompletion} />
+      <div className={styles.bottomMask} onClick={closeAutocompletion} />
+      <div className={styles.leftMask} onClick={closeAutocompletion} />
+      <div className={styles.rightMask} onClick={closeAutocompletion} />
+      <div className={styles.autocompletionsContainer}>
+        <div>
+          {autocompletion
+            .slice(0, 20)
+            .reverse()
+            .map((autocompletion, index) => (
+              <div
+                key={index}
+                className={[
+                  styles.autocompletionItem,
+                  autocompletion === editedContent
+                    ? styles.selectedAutocompletion
+                    : "",
+                ].join(" ")}
+                onClick={() => handleSuggestionClick(autocompletion)}
+              >
+                {autocompletion}
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

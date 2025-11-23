@@ -33,25 +33,53 @@ const AverageBar = ({
         {total.toFixed(nutrient.unitDecimals)} {nutrient.unit}
       </span>
       <div
+        className={styles.barWrapper}
         style={{
           height: `${BAR_HEIGHT}px`,
-          width: `${totalWidth}px`,
-          backgroundColor: nutrient.colorValue,
+          width: `${BAR_WIDTH}px` /* Set width based on remaining amount to reach average */,
         }}
-      ></div>
-      <div
-        style={{
-          height: `${BAR_HEIGHT}px`,
-          width: `${remainingWidth}px` /* Set width based on remaining amount to reach average */,
-          backgroundColor: nutrient.colorTarget,
-        }}
-      ></div>
-      {isOverflowing && (
+      >
         <div
-          className={styles.barOverflowSymbol}
-          style={{ left: `${overFlowRatio}px` }}
+          className={styles.bar}
+          style={{
+            height: `${BAR_HEIGHT}px`,
+            width: `${BAR_WIDTH}px` /* Set width based on remaining amount to reach average */,
+            backgroundColor: nutrient.colorTarget,
+          }}
         ></div>
-      )}
+        <div
+          className={styles.bar}
+          style={{
+            height: `${BAR_HEIGHT}px`,
+            width: `${totalWidth}px`,
+            backgroundColor: "#ffffff00",
+          }}
+        >
+          <div
+            className={[styles.bar, styles.barValue].join(" ")}
+            style={{
+              height: `${BAR_HEIGHT}px`,
+              width: `${totalWidth}px`,
+              backgroundColor: nutrient.colorValue,
+            }}
+          ></div>
+        </div>
+        {isOverflowing && (
+          <div
+            className={styles.barOverflowContainer}
+            style={{
+              height: `${BAR_HEIGHT}px`,
+              width: `${totalWidth}px`,
+              backgroundColor: nutrient.colorValue,
+            }}
+          >
+            <div
+              className={styles.barOverflowSymbol}
+              style={{ left: `${overFlowRatio}px` }}
+            ></div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

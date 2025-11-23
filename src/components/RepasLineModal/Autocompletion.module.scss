@@ -1,0 +1,98 @@
+$topPosition: 2rem;
+$maxHeight: calc(100% - 160px - 1rem - $topPosition - 5px);
+
+.autocompletionsContainer {
+  position: absolute;
+  z-index: 1200;
+  //   top: $topPosition;
+  bottom: calc(1rem + 160px + 5px);
+  width: calc(100% - 2rem - 1.2rem);
+  height: auto;
+  max-height: $maxHeight;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #fff;
+  gap: 0.2rem;
+  border-top: none;
+  overflow-y: hidden;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding-top: 2px;
+  // height: calc(50% - 1rem);
+  // max-height: calc(50% - 1rem);
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1px;
+    overflow-y: scroll;
+  }
+}
+
+$maskBackgroundColor: rgba(255, 0, 0, 0);
+
+.topMask {
+  position: absolute;
+  top: 0;
+  width: 150%;
+  height: calc($maxHeight + 5px + $topPosition);
+  background-color: $maskBackgroundColor;
+  z-index: 1199;
+}
+
+.overtopMask {
+  position: absolute;
+  //   top: 0;
+  width: 150%;
+  bottom: 100%;
+  height: 100%;
+  background-color: $maskBackgroundColor;
+  z-index: 1201;
+}
+
+.bottomMask {
+  position: absolute;
+  top: calc(100% - 2rem - 40px);
+  width: 150%;
+  height: 100%;
+  background-color: $maskBackgroundColor;
+  z-index: 1199;
+}
+
+.leftMask {
+  position: absolute;
+  top: 0;
+  right: calc(100% - 1rem);
+  width: 100%;
+  height: 100%;
+  background-color: $maskBackgroundColor;
+  z-index: 1199;
+}
+
+.rightMask {
+  position: absolute;
+  top: 0;
+  left: calc(100% - 1rem);
+  width: 100%;
+  height: 100%;
+  background-color: $maskBackgroundColor;
+  z-index: 1199;
+}
+
+.autocompletionItem {
+  //   border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  color: rgb(213, 213, 213);
+  // background-color: #f0f0f0;
+  background: linear-gradient(90deg, #1c1c1c, #434343);
+}
+.autocompletionItem:hover {
+  background-color: #d0d0d0;
+}
+
+.selectedAutocompletion {
+  font-weight: bold;
+}

@@ -5,6 +5,7 @@ import NutrimentsResume from "./NutrimentsResume";
 import Autocompletion from "./Autocompletion";
 import Habitudes from "./Habitudes";
 import Suggestions from "./Suggestions";
+import Recents from "./Recents";
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -23,12 +24,22 @@ const RepasLineModal = ({
 }: RepasLineModalProps) => {
   const [editedContent, setEditedContent] = useState(content);
   const [selectedTab, setSelectedTab] = useState<
-    "habitudes" | "autocompletion" | "suggestions"
+    "habitudes" | "recent" | "suggestions"
   >("habitudes");
 
+  const [showAutocompletion, setShowAutocompletion] = useState(false);
+
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedContent(e.target.value.replace(/\n/g, ""));
-    if (selectedTab !== "autocompletion") setSelectedTab("autocompletion");
+    const newEditedContent = e.target.value.replace(/\n/g, "");
+    setEditedContent(newEditedContent);
+    if (showAutocompletion == false && newEditedContent.length > 0)
+      setShowAutocompletion(true);
+    if (showAutocompletion == true && newEditedContent.length === 0)
+      setShowAutocompletion(false);
+  };
+
+  const closeAutocompletion = () => {
+    setShowAutocompletion(false);
   };
 
   return (
@@ -50,15 +61,13 @@ const RepasLineModal = ({
               className={selectedTab === "habitudes" ? styles.selectedTab : ""}
               onClick={() => setSelectedTab("habitudes")}
             >
-              Mes habitudes
+              📋 Mes habitudes
             </h2>
             <h2
-              className={
-                selectedTab === "autocompletion" ? styles.selectedTab : ""
-              }
-              onClick={() => setSelectedTab("autocompletion")}
+              className={selectedTab === "recent" ? styles.selectedTab : ""}
+              onClick={() => setSelectedTab("recent")}
             >
-              Autocompletion
+              ⏰ Récents
             </h2>
             <h2
               className={
@@ -66,7 +75,7 @@ const RepasLineModal = ({
               }
               onClick={() => setSelectedTab("suggestions")}
             >
-              Suggestions
+              ✨ Suggestions
             </h2>
           </div>
           {selectedTab === "habitudes" && (
@@ -76,8 +85,9 @@ const RepasLineModal = ({
               editedContent={editedContent}
             />
           )}
-          {selectedTab === "autocompletion" && (
-            <Autocompletion
+          {selectedTab === "recent" && (
+            <Recents
+              dayTimeCol={dayTimeCol}
               editedContent={editedContent}
               setEditedContent={setEditedContent}
             />
@@ -91,6 +101,13 @@ const RepasLineModal = ({
           )}
         </div>
         <NutrimentsResume editedContent={editedContent} />
+        {showAutocompletion && (
+          <Autocompletion
+            editedContent={editedContent}
+            setEditedContent={setEditedContent}
+            closeAutocompletion={closeAutocompletion}
+          />
+        )}
 
         <div className={styles.editContainer}>
           <textarea
