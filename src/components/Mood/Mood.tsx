@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Mood.module.scss";
 import Symptom from "./Symptom";
 import MoodComment from "./MoodComment";

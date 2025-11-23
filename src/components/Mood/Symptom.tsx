@@ -1,4 +1,3 @@
-import React from "react";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import styles from "./Symptom.module.scss";
 
