@@ -9,8 +9,16 @@ export const convertDateToString = (date: Date) => {
 };
 
 export const removeAccents = (
-  dayTimeCol: "matin" | "midi" | "goûter" | "soir"
+  dayTimeColOrSymptom:
+    | "matin"
+    | "midi"
+    | "goûter"
+    | "soir"
+    | "ballonnements"
+    | "selles"
+    | "nausées"
 ) => {
-  if (dayTimeCol === "goûter") return "gouter";
-  return dayTimeCol;
+  if (dayTimeColOrSymptom === "goûter") return "gouter";
+  if (dayTimeColOrSymptom === "nausées") return "nausees";
+  return dayTimeColOrSymptom;
 };

@@ -153,6 +153,66 @@ export const useSuiviRegime = () => {
       });
     };
 
+  type HandleUpdateSymptomProps = {
+    symptom: "ballonnements" | "selles" | "nausées";
+    value: number;
+  };
+
+  const handleUpdateSymptom = ({
+    symptom,
+    value,
+  }: HandleUpdateSymptomProps) => {
+    if (!selectedSuiviDay) return;
+
+    setSuiviDays(
+      suiviDays.map((suiviDay) => {
+        if (
+          convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
+          convertDateToString(selectedDay)
+        ) {
+          return {
+            ...suiviDay,
+            [symptom]: value,
+          };
+        } else return suiviDay;
+      })
+    );
+
+    fetchUpdateSuiviDay({
+      payload: {
+        date: convertDateToString(selectedDay),
+        [removeAccents(symptom)]: value,
+      },
+      setInvalidPassword,
+    });
+  };
+
+  const handleUpdateComment = (newComment: string) => {
+    if (!selectedSuiviDay) return;
+
+    setSuiviDays(
+      suiviDays.map((suiviDay) => {
+        if (
+          convertDateToString(convertJsonStringToDate(suiviDay.date)) ===
+          convertDateToString(selectedDay)
+        ) {
+          return {
+            ...suiviDay,
+            commentaire: newComment,
+          };
+        } else return suiviDay;
+      })
+    );
+
+    fetchUpdateSuiviDay({
+      payload: {
+        date: convertDateToString(selectedDay),
+        commentaire: newComment,
+      },
+      setInvalidPassword,
+    });
+  };
+
   type HandleRemoveLineProps = {
     dayTimeCol: "matin" | "midi" | "goûter" | "soir";
     splitText: string[];
@@ -364,5 +424,7 @@ export const useSuiviRegime = () => {
     goToNextDay,
     goToToday,
     handleAddToDatabase,
+    handleUpdateSymptom,
+    handleUpdateComment,
   };
 };

@@ -1,0 +1,33 @@
+.symptomContainer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  height: 60px;
+}
+
+.symptomTitle {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  margin: 0;
+  font-size: 0.6rem;
+  color: #666;
+}
+
+.symptomEmoji {
+  position: absolute;
+  left: 20px;
+  top: 5px;
+  font-size: 48px;
+  margin-right: 16px;
+}
+
+.star {
+  width: 48px;
+  height: 48px;
+}

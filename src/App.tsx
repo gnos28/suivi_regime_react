@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useContext, useEffect } from "react";
 import styles from "./App.module.scss";
-import SuiviDay from "./components/SuiviDay/SuiviDay";
+import Body from "./components/Body";
 import HeaderDate from "./components/Header/HeaderDate";
 import NavBar from "./components/NavBar/NavBar";
 import { useSuiviRegime } from "./hooks/useSuiviRegime";
@@ -60,7 +60,7 @@ function App() {
           {isLoading ? (
             <LoadingRing />
           ) : (
-            selectedSuiviDay !== undefined && <SuiviDay />
+            selectedSuiviDay !== undefined && <Body />
           )}
           <NavBar />
         </>

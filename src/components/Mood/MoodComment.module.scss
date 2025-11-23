@@ -1,0 +1,30 @@
+.moodCommentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.textarea {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  width: calc(100% - 3rem);
+  //   height: 100%;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
+  outline: none;
+}
+
+.moodCommentTitle {
+  position: absolute;
+  left: 5px;
+  bottom: -20px;
+  margin: 0;
+  font-size: 0.6rem;
+  color: #666;
+}
