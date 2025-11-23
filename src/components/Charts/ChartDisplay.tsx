@@ -191,13 +191,18 @@ const ChartDisplay = ({
     datasets: barDatasets,
   };
 
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
+  const aspectRatio = windowWidth / ((windowHeight - 170) / 2);
+
   return (
     <div className={styles.chartDisplayContainer}>
       {dataGroup.includes("ballonnements") ? (
         <Bar
           options={{
             responsive: true,
-            aspectRatio: 1.5,
+            aspectRatio,
             interaction: {
               mode: "index" as const,
               intersect: false,
@@ -226,7 +231,7 @@ const ChartDisplay = ({
         <Line
           options={{
             responsive: true,
-            aspectRatio: 1.5,
+            aspectRatio,
             interaction: {
               mode: "index" as const,
               intersect: false,

@@ -105,13 +105,9 @@ const NavBar = () => {
             ? styles.pressedCircle
             : styles.unpressedCircle,
         ].join(" ")}
-        onClick={() => setActiveMenu("gemini")}
       >
         <h1 onClick={callGeminiAndRefresh}>
           <GeminiIcon isLoading={isLoading} />
-          {/* <span className={isLoading ? styles.rotatingIcon : ""}>
-          {isLoading ? "⏳" : "🔁"} 
-        </span> */}
         </h1>
       </div>
     </div>

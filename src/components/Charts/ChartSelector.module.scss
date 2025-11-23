@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   transition: filter 0.3s ease;
-  top: 12vh;
+  top: calc((100vh - 170px) / 4 - 24px);
   // background-color: red;
 }
 

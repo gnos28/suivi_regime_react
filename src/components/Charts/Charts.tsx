@@ -18,10 +18,6 @@ const Charts = () => {
 
   return (
     <div className={styles.chartsContainer}>
-      <TimeSelector
-        selectedTimeRange={selectedTimeRange}
-        setSelectedTimeRange={setSelectedTimeRange}
-      />
       <ChartDisplay
         dataGroup={selectedDataGroup1}
         setSelectedDataGroup={setSelectedDataGroup1}
@@ -31,6 +27,10 @@ const Charts = () => {
         dataGroup={selectedDataGroup2}
         setSelectedDataGroup={setSelectedDataGroup2}
         timeRange={selectedTimeRange}
+      />
+      <TimeSelector
+        selectedTimeRange={selectedTimeRange}
+        setSelectedTimeRange={setSelectedTimeRange}
       />
     </div>
   );
