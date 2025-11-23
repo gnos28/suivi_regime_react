@@ -20,8 +20,8 @@ const AverageBar = ({
   const BAR_HEIGHT = 12;
 
   const totalWidth = Math.min((total / average) * BAR_WIDTH, BAR_WIDTH);
-  const remainingWidth =
-    average - total > 0 ? ((average - total) / average) * BAR_WIDTH : 0;
+  // const remainingWidth =
+  //   average - total > 0 ? ((average - total) / average) * BAR_WIDTH : 0;
 
   const isOverflowing = total > average;
 
