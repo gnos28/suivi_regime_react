@@ -3,12 +3,14 @@ import styles from "./Body.module.scss";
 import { useContext } from "react";
 import ActiveMenuContext from "../contexts/activeMenuContext";
 import Mood from "./Mood/Mood";
+import Charts from "./Charts/Charts";
 
 const Body = () => {
   const { activeMenu } = useContext(ActiveMenuContext);
 
   return (
     <div className={styles.bodyContainer}>
+      {activeMenu === "charts" && <Charts />}
       {activeMenu === "repas" && (
         <>
           <RepasSection title="Matin" dayTimeCol="matin" />

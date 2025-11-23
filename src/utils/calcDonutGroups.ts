@@ -2,8 +2,210 @@ import type { Target } from "../contexts/targetsContext";
 import type { DatabaseColName, SuiviColName } from "../types/globales";
 import { calcColumnTotal } from "./calcColumnTotal";
 
+export type BaseDonutGroupItem = {
+  name: SuiviColName;
+  nameAbbr: string;
+  colorValue: string;
+  colorTarget: string;
+  unit: string;
+  unitDecimals: number;
+  yAxisID?: "y" | "y1";
+};
+
+export const baseDonutGroups: BaseDonutGroupItem[][] = [
+  [
+    {
+      name: "Calories",
+      nameAbbr: "Cal",
+      colorValue: "rgba(44, 44, 44, 0.2)",
+      colorTarget: "rgba(172, 172, 172, 0.2)",
+      unit: "kcal",
+      unitDecimals: 0,
+    },
+    {
+      name: "Proteines",
+      nameAbbr: "Prot",
+      colorValue: "rgba(70, 92, 255, 0.2)",
+      colorTarget: "rgba(167, 178, 255, 0.2)",
+      unit: "g",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+    {
+      name: "Lipides",
+      nameAbbr: "Lip",
+      colorValue: "rgba(255, 217, 45, 0.35)",
+      colorTarget: "rgba(255, 233, 161, 0.2)",
+      unit: "g",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+    {
+      name: "Glucides",
+      nameAbbr: "Gluc",
+      colorValue: "rgba(235, 54, 54, 0.2)",
+      colorTarget: "rgba(255, 192, 192, 0.2)",
+      unit: "g",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+  ],
+  [
+    {
+      name: "fibre solubles",
+      nameAbbr: "FibSol",
+      colorValue: "rgba(34, 139, 34, 0.2)",
+      colorTarget: "rgba(144, 238, 144, 0.2)",
+      unit: "g",
+      unitDecimals: 1,
+    },
+    {
+      name: "fibres insolubles",
+      nameAbbr: "FibInsol",
+      colorValue: "rgba(100, 43, 0, 0.33)",
+      colorTarget: "rgba(219, 82, 33, 0.33)",
+      unit: "g",
+      unitDecimals: 1,
+    },
+    {
+      name: "fibre total",
+      nameAbbr: "FibTot",
+      colorValue: "rgba(135, 139, 34, 0.2)",
+      colorTarget: "rgba(238, 233, 144, 0.2)",
+      unit: "g",
+      unitDecimals: 1,
+    },
+    {
+      name: "soluble / insoluble",
+      nameAbbr: "Sol/Insol",
+      colorValue: "rgba(60, 179, 113, 0.2)",
+      colorTarget: "rgba(152, 251, 152, 0.2)",
+      unit: "",
+      unitDecimals: 2,
+      yAxisID: "y1",
+    },
+  ],
+  [
+    {
+      name: "Sodium",
+      nameAbbr: "Sod",
+      colorValue: "rgba(255, 69, 0, 0.2)",
+      colorTarget: "rgba(255, 160, 122, 0.2)",
+      unit: "mg",
+      unitDecimals: 0,
+    },
+    {
+      name: "Potassium",
+      nameAbbr: "Pot",
+      colorValue: "rgba(30, 144, 255, 0.2)",
+      colorTarget: "rgba(135, 206, 250, 0.2)",
+      unit: "mg",
+      unitDecimals: 0,
+    },
+    {
+      name: "Calcium",
+      nameAbbr: "Ca",
+      colorValue: "rgba(100, 149, 237, 0.2)",
+      colorTarget: "rgba(173, 216, 230, 0.2)",
+      unit: "mg",
+      unitDecimals: 0,
+    },
+  ],
+  [
+    {
+      name: "Magnésium",
+      nameAbbr: "Mg",
+      colorValue: "rgba(72, 61, 139, 0.2)",
+      colorTarget: "rgba(216, 191, 216, 0.2)",
+      unit: "mg",
+      unitDecimals: 0,
+    },
+    {
+      name: "Fer",
+      nameAbbr: "Fe",
+      colorValue: "rgba(178, 34, 34, 0.2)",
+      colorTarget: "rgba(255, 182, 193, 0.2)",
+      unit: "mg",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+    {
+      name: "Zinc",
+      nameAbbr: "Zn",
+      colorValue: "rgba(205, 133, 63, 0.2)",
+      colorTarget: "rgba(244, 164, 96, 0.2)",
+      unit: "mg",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+  ],
+  [
+    {
+      name: "Vitamine D",
+      nameAbbr: "Vit D",
+      colorValue: "rgba(218, 165, 32, 0.2)",
+      colorTarget: "rgba(255, 215, 0, 0.2)",
+      unit: "µg",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+    {
+      name: "Vitamine B9",
+      nameAbbr: "Vit B9",
+      colorValue: "rgba(123, 104, 238, 0.2)",
+      colorTarget: "rgba(216, 191, 216, 0.2)",
+      unit: "µg",
+      unitDecimals: 1,
+    },
+    {
+      name: "Vitamine B12",
+      nameAbbr: "Vit B12",
+      colorValue: "rgba(199, 21, 133, 0.2)",
+      colorTarget: "rgba(255, 182, 193, 0.2)",
+      unit: "µg",
+      unitDecimals: 1,
+      yAxisID: "y1",
+    },
+    {
+      name: "Vitamine C",
+      nameAbbr: "Vit C",
+      colorValue: "rgba(50, 205, 50, 0.2)",
+      colorTarget: "rgba(144, 238, 144, 0.2)",
+      unit: "mg",
+      unitDecimals: 1,
+    },
+  ],
+  [
+    {
+      name: "Oméga-3",
+      nameAbbr: "Ω3",
+      colorValue: "rgba(0, 191, 255, 0.2)",
+      colorTarget: "rgba(135, 206, 250, 0.2)",
+      unit: "mg",
+      unitDecimals: 1,
+    },
+    {
+      name: "Oméga-6",
+      nameAbbr: "Ω6",
+      colorValue: "rgba(255, 140, 0, 0.2)",
+      colorTarget: "rgba(255, 218, 185, 0.2)",
+      unit: "mg",
+      unitDecimals: 1,
+    },
+    {
+      name: "Ω3 / Ω6",
+      nameAbbr: "Ω3/Ω6",
+      colorValue: "rgba(72, 209, 204, 0.2)",
+      colorTarget: "rgba(175, 238, 238, 0.2)",
+      unit: "",
+      unitDecimals: 2,
+      yAxisID: "y1",
+    },
+  ],
+];
+
 export type DonutGroupItem = {
-  name: DatabaseColName;
+  name: SuiviColName;
   nameAbbr: string;
   colorValue: string;
   colorTarget: string;
@@ -12,19 +214,22 @@ export type DonutGroupItem = {
   textLines: string[];
   unit: string;
   unitDecimals: number;
+  yAxisID?: "y" | "y1";
+};
+
+type CalcDonutGroupsProps = {
+  selectedSuiviDay:
+    | Record<SuiviColName, string | number | undefined>
+    | undefined;
+  database: Record<DatabaseColName, string | number | undefined>[];
+  targets: Target[];
 };
 
 export const calcDonutGroups = ({
   selectedSuiviDay,
   database,
   targets,
-}: {
-  selectedSuiviDay:
-    | Record<SuiviColName, string | number | undefined>
-    | undefined;
-  database: Record<DatabaseColName, string | number | undefined>[];
-  targets: Target[];
-}) => {
+}: CalcDonutGroupsProps) => {
   const calcColumnTotalDay = calcColumnTotal({
     periods: [
       selectedSuiviDay?.matin?.toString() ?? "",
@@ -154,6 +359,7 @@ export const calcDonutGroups = ({
         ],
         unit: "g",
         unitDecimals: 1,
+        yAxisID: "y1",
       },
       {
         name: "Lipides",
@@ -168,6 +374,7 @@ export const calcDonutGroups = ({
         ],
         unit: "g",
         unitDecimals: 1,
+        yAxisID: "y1",
       },
       {
         name: "Glucides",
@@ -182,6 +389,7 @@ export const calcDonutGroups = ({
         ],
         unit: "g",
         unitDecimals: 1,
+        yAxisID: "y1",
       },
     ],
     [

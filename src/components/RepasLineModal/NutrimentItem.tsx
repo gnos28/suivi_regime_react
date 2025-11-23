@@ -1,17 +1,12 @@
 import type { DatabaseExtended } from "../../types/databaseExtended";
 import type { DatabaseColName } from "../../types/globales";
+import type { DonutGroupItem } from "../../utils/calcDonutGroups";
 import styles from "./NutrimentItem.module.scss";
 
 type NutrimentItemProps = {
   colName: DatabaseColName;
   nutrimentsResume: DatabaseExtended | null;
-  donutGroups: {
-    name: DatabaseColName;
-    nameAbbr: string;
-    colorValue: string;
-    unitDecimals?: number;
-    unit: string;
-  }[];
+  donutGroups: DonutGroupItem[];
 };
 
 const NutrimentItem = ({

@@ -27,7 +27,37 @@
   margin-right: 16px;
 }
 
+.starContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 48px;
+  // gap: -8px;
+  position: relative;
+}
+
 .star {
+  position: absolute;
+  left: 0;
+  top: -27.5px;
   width: 48px;
   height: 48px;
+}
+
+.starEmpty {
+  filter: grayscale(100%) brightness(150%);
+}
+
+@keyframes greyToYellow {
+  from {
+    filter: grayscale(100%) brightness(150%);
+  }
+  to {
+    filter: none;
+  }
+}
+
+.starYellow {
+  animation: greyToYellow 0.2s ease-in-out forwards;
 }

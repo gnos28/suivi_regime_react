@@ -8,12 +8,14 @@ import { useSuiviRegime } from "./hooks/useSuiviRegime";
 import LoadingRing from "./components/LoadingRing";
 import PasswordContext from "./contexts/passwordContext";
 import PasswordModal from "./components/PasswordModal";
+import ActiveMenuContext from "./contexts/activeMenuContext";
 
 function App() {
   const { refreshAllData, selectedSuiviDay, isLoading } = useSuiviRegime();
 
   const { password, setPassword, invalidPassword, setInvalidPassword } =
     useContext(PasswordContext);
+  const { activeMenu } = useContext(ActiveMenuContext);
 
   const getPasswordFromLocalStorage = useCallback(() => {
     const storedPassword = localStorage.getItem("suivi_regime_password");
@@ -56,7 +58,7 @@ function App() {
         <PasswordModal />
       ) : (
         <>
-          <HeaderDate />
+          {activeMenu !== "charts" && <HeaderDate />}
           {isLoading ? (
             <LoadingRing />
           ) : (

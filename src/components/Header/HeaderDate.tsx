@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./HeaderDate.module.scss";
-import Donut from "../SuiviDay/Donut";
+import Donut from "./Donut";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
 import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
