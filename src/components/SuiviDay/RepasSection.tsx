@@ -5,60 +5,10 @@ import { useContext, useState } from "react";
 import { calcColumnTotal } from "../../utils/calcColumnTotal";
 import RepasLineModal from "../RepasLineModal/RepasLineModal";
 import { calcColumnAverage } from "../../utils/calcColumnAverage";
-import type { DatabaseColName } from "../../types/globales";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
-
-type AverageBarProps = {
-  columnName: DatabaseColName;
-  calcColumnTotalPeriod: (columnName: DatabaseColName) => number;
-  calcColumnAveragePeriod: (columnName: DatabaseColName) => number;
-  unit: string;
-  color: string;
-  colorRemaining: string;
-};
-
-const AverageBar = ({
-  columnName,
-  calcColumnTotalPeriod,
-  calcColumnAveragePeriod,
-  unit,
-  color,
-  colorRemaining,
-}: AverageBarProps) => {
-  const total = calcColumnTotalPeriod(columnName);
-  const average = calcColumnAveragePeriod(columnName);
-
-  const BAR_WIDTH = 70;
-  const BAR_HEIGHT = 12;
-
-  const totalWidth = Math.min((total / average) * BAR_WIDTH, BAR_WIDTH);
-  const remainingWidth =
-    average - total > 0 ? ((average - total) / average) * BAR_WIDTH : 0;
-
-  return (
-    <div className={styles.averageBarContainer}>
-      <span className={styles.averageBarLabel}>
-        {total.toFixed(0)} {unit}
-      </span>
-      <div
-        style={{
-          height: `${BAR_HEIGHT}px`,
-          width: `${totalWidth}px`,
-          backgroundColor: color,
-        }}
-      ></div>
-      <div
-        style={{
-          height: `${BAR_HEIGHT}px`,
-          width: `${remainingWidth}px` /* Set width based on remaining amount to reach average */,
-          backgroundColor: colorRemaining,
-        }}
-      ></div>
-    </div>
-  );
-};
+import AverageBar from "./AverageBar";
 
 type RepasSectionProps = {
   title: string;
@@ -138,12 +88,9 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
           {donutGroups[donutGroupIndex]?.map((nutrient) => (
             <AverageBar
               key={nutrient.name}
-              columnName={nutrient.name}
               calcColumnTotalPeriod={calcColumnTotalPeriod}
               calcColumnAveragePeriod={calcColumnAveragePeriod}
-              unit={nutrient.unit}
-              color={nutrient.colorValue}
-              colorRemaining={nutrient.colorTarget}
+              nutrient={nutrient}
             />
           ))}
         </div>

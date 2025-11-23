@@ -5,6 +5,8 @@ type CalcColumnTotalProps = {
   database: Record<DatabaseColName, string | number | undefined>[];
 };
 
+const avoidNaN = (value: number): number => (isNaN(value) ? 0 : value);
+
 export const calcColumnTotal =
   ({ periods, database }: CalcColumnTotalProps) =>
   (columnName: DatabaseColName): number => {
@@ -21,9 +23,9 @@ export const calcColumnTotal =
 
           const itemValue = dbItem !== undefined ? dbItem[columnName] ?? 0 : 0;
 
-          const itemValueFloat = parseFloat(itemValue.toString());
+          const itemValueFloat = avoidNaN(parseFloat(itemValue.toString()));
 
-          return total + (isNaN(itemValueFloat) ? 0 : itemValueFloat);
+          return total + itemValueFloat;
         }, 0);
       })
       .reduce((acc, val) => acc + val, 0);

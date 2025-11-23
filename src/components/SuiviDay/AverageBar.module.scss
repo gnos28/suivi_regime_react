@@ -1,0 +1,25 @@
+.averageBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // gap: 0.5rem;
+  // margin-top: 0.5rem;
+  position: relative;
+}
+
+.averageBarLabel {
+  position: absolute;
+  left: -70px;
+  width: 65px;
+  text-align: right;
+  font-size: 0.6rem;
+  color: #333333;
+  margin-right: 0.5rem;
+}
+
+.barOverflowSymbol {
+  position: absolute;
+  background-color: black;
+  width: 1px;
+  height: 12px;
+}

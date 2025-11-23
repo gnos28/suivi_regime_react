@@ -6,6 +6,9 @@ type CalcColumnAverageProps = {
   suiviDays: Record<SuiviColName, string | number | undefined>[];
 };
 
+const avoidNaN = (value: number): number => (isNaN(value) ? 0 : value);
+// const avoidNaN = (value: number): number => value
+
 export const calcColumnAverage =
   ({ dayTimeCol, database, suiviDays }: CalcColumnAverageProps) =>
   (columnName: DatabaseColName): number => {
@@ -30,7 +33,7 @@ export const calcColumnAverage =
           );
           const itemValue =
             dbItem !== undefined
-              ? parseFloat(dbItem[columnName]?.toString() ?? "0")
+              ? avoidNaN(parseFloat(dbItem[columnName]?.toString() ?? "0"))
               : 0;
           return total + itemValue;
         }, 0);

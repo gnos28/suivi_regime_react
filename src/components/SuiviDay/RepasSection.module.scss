@@ -78,25 +78,6 @@
   gap: 2px;
 }
 
-.averageBarContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  // gap: 0.5rem;
-  // margin-top: 0.5rem;
-  position: relative;
-}
-
-.averageBarLabel {
-  position: absolute;
-  left: -55px;
-  width: 50px;
-  text-align: right;
-  font-size: 0.6rem;
-  color: #333333;
-  margin-right: 0.5rem;
-}
-
 @keyframes growingFromTop {
   0% {
     transform: scaleY(0);

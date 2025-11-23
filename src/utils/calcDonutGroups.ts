@@ -2,6 +2,18 @@ import type { Target } from "../contexts/targetsContext";
 import type { DatabaseColName, SuiviColName } from "../types/globales";
 import { calcColumnTotal } from "./calcColumnTotal";
 
+export type DonutGroupItem = {
+  name: DatabaseColName;
+  nameAbbr: string;
+  colorValue: string;
+  colorTarget: string;
+  value: number;
+  target: number;
+  textLines: string[];
+  unit: string;
+  unitDecimals: number;
+};
+
 export const calcDonutGroups = ({
   selectedSuiviDay,
   database,
@@ -109,19 +121,7 @@ export const calcDonutGroups = ({
     targets.find((target) => target.targetName === "Ω3 / Ω6")?.min ?? "0"
   );
 
-  type donutGroupItem = {
-    name: DatabaseColName;
-    nameAbbr: string;
-    colorValue: string;
-    colorTarget: string;
-    value: number;
-    target: number;
-    textLines: string[];
-    unit: string;
-    unitDecimals: number;
-  };
-
-  const donutGroups: donutGroupItem[][] = [
+  const donutGroups: DonutGroupItem[][] = [
     [
       {
         name: "Calories",
