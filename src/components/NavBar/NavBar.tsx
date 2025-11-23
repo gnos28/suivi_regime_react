@@ -1,6 +1,6 @@
 import styles from "./NavBar.module.scss";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ActiveMenuContext from "../../contexts/activeMenuContext";
 
 const foodEmojis = [
