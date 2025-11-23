@@ -13,8 +13,8 @@ const AverageBar = ({
   calcColumnTotalPeriod,
   calcColumnAveragePeriod,
 }: AverageBarProps) => {
-  const total = calcColumnTotalPeriod(nutrient.name);
-  const average = calcColumnAveragePeriod(nutrient.name);
+  const total = calcColumnTotalPeriod(nutrient.name as DatabaseColName);
+  const average = calcColumnAveragePeriod(nutrient.name as DatabaseColName);
 
   const BAR_WIDTH = 70;
   const BAR_HEIGHT = 12;

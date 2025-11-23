@@ -13,13 +13,13 @@ import {
 import { Bar, Line } from "react-chartjs-2";
 import styles from "./ChartDisplay.module.scss";
 import type { SuiviColName } from "../../types/globales";
-import type { TimeRange } from "./Charts";
 import {
   baseDonutGroups,
   type DonutGroupItem,
 } from "../../utils/calcDonutGroups";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import ChartSelector from "./ChartSelector";
+import type { TimeRange } from "./constants";
 
 ChartJS.register(
   CategoryScale,

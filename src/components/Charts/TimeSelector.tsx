@@ -1,5 +1,5 @@
-import { timeRanges, type TimeRange } from "./Charts";
 import buttonStyles from "../../styles/button.module.scss";
+import { type TimeRange, timeRanges } from "./constants";
 import styles from "./TimeSelector.module.scss";
 
 type TimeSelectorProps = {

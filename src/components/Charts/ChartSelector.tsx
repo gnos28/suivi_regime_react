@@ -1,6 +1,6 @@
 import type { SuiviColName } from "../../types/globales";
-import { dataGroups } from "./Charts";
 import styles from "./ChartSelector.module.scss";
+import { dataGroups } from "./constants";
 
 type ChartSelectorProps = {
   selectedDataGroup: SuiviColName[];
