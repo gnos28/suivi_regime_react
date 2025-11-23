@@ -2,11 +2,11 @@ import { createContext, useState, useMemo, type ReactNode } from "react";
 
 type ActiveMenuContextProviderProps = { children: ReactNode };
 
+export type MenuItem = "charts" | "repas" | "mood" | "gemini";
+
 type TypeContext = {
-  activeMenu: "charts" | "repas" | "mood" | "gemini";
-  setActiveMenu: React.Dispatch<
-    React.SetStateAction<"charts" | "repas" | "mood" | "gemini">
-  >;
+  activeMenu: MenuItem;
+  setActiveMenu: React.Dispatch<React.SetStateAction<MenuItem>>;
 };
 
 const ActiveMenuContext = createContext<TypeContext>({
@@ -17,10 +17,7 @@ const ActiveMenuContext = createContext<TypeContext>({
 export function ActiveMenuContextProvider({
   children,
 }: ActiveMenuContextProviderProps) {
-  const [activeMenu, setActiveMenu] = useState<
-    "charts" | "repas" | "mood" | "gemini"
-  >("repas");
-
+  const [activeMenu, setActiveMenu] = useState<MenuItem>("repas");
   const value = useMemo(
     () => ({
       activeMenu,

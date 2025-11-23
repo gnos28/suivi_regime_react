@@ -64,7 +64,7 @@ function App() {
           ) : (
             selectedSuiviDay !== undefined && <Body />
           )}
-          <NavBar />
+          <NavBar disable={isLoading} />
         </>
       )}
     </div>

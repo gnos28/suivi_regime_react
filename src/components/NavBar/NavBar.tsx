@@ -1,7 +1,9 @@
 import styles from "./NavBar.module.scss";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import { useContext } from "react";
-import ActiveMenuContext from "../../contexts/activeMenuContext";
+import ActiveMenuContext, {
+  type MenuItem,
+} from "../../contexts/activeMenuContext";
 
 const foodEmojis = [
   "🥖",
@@ -46,7 +48,11 @@ const GeminiIcon = ({ isLoading }: { isLoading: boolean }) => {
   );
 };
 
-const NavBar = () => {
+type NavBarProps = {
+  disable: boolean;
+};
+
+const NavBar = ({ disable }: NavBarProps) => {
   const { selectedDay, refreshAllData, isLoading } = useSuiviRegime();
   const { activeMenu, setActiveMenu } = useContext(ActiveMenuContext);
 
@@ -54,6 +60,12 @@ const NavBar = () => {
 
   const callGeminiAndRefresh = async () => {
     await refreshAllData({ callGemini: true });
+  };
+
+  const handleMenuCLick = (menu: MenuItem) => () => {
+    if (!disable) {
+      setActiveMenu(menu);
+    }
   };
 
   return (
@@ -65,7 +77,7 @@ const NavBar = () => {
             ? styles.pressedCircle
             : styles.unpressedCircle,
         ].join(" ")}
-        onClick={() => setActiveMenu("charts")}
+        onClick={handleMenuCLick("charts")}
       >
         <h1>📊</h1>
       </div>
@@ -76,7 +88,7 @@ const NavBar = () => {
             ? styles.pressedCircle
             : styles.unpressedCircle,
         ].join(" ")}
-        onClick={() => setActiveMenu("repas")}
+        onClick={handleMenuCLick("repas")}
       >
         <h1 className={styles.foodEmoji}>{foodEmoji}</h1>
       </div>
@@ -85,7 +97,7 @@ const NavBar = () => {
           styles.circle,
           activeMenu === "mood" ? styles.pressedCircle : styles.unpressedCircle,
         ].join(" ")}
-        onClick={() => setActiveMenu("mood")}
+        onClick={handleMenuCLick("mood")}
       >
         <h1>
           <img
