@@ -10,6 +10,18 @@ const avoidNaN = (value: number): number => (isNaN(value) ? 0 : value);
 export const calcColumnTotal =
   ({ periods, database }: CalcColumnTotalProps) =>
   (columnName: DatabaseColName): number => {
+    if (columnName === "soluble / insoluble")
+      return avoidNaN(
+        calcColumnTotal({ periods, database })("fibre solubles") /
+          calcColumnTotal({ periods, database })("fibres insolubles")
+      );
+
+    if (columnName === "Ω3 / Ω6")
+      return avoidNaN(
+        calcColumnTotal({ periods, database })("Oméga-3") /
+          calcColumnTotal({ periods, database })("Oméga-6")
+      );
+
     const total = periods
       .map((meals) => {
         if (!meals) return 0;
