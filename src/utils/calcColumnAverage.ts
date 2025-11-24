@@ -12,6 +12,22 @@ const avoidNaN = (value: number): number => (isNaN(value) ? 0 : value);
 export const calcColumnAverage =
   ({ dayTimeCol, database, suiviDays }: CalcColumnAverageProps) =>
   (columnName: DatabaseColName): number => {
+    if (columnName === "soluble / insoluble")
+      return avoidNaN(
+        calcColumnAverage({ dayTimeCol, database, suiviDays })(
+          "fibre solubles"
+        ) /
+          calcColumnAverage({ dayTimeCol, database, suiviDays })(
+            "fibres insolubles"
+          )
+      );
+
+    if (columnName === "Ω3 / Ω6")
+      return avoidNaN(
+        calcColumnAverage({ dayTimeCol, database, suiviDays })("Oméga-3") /
+          calcColumnAverage({ dayTimeCol, database, suiviDays })("Oméga-6")
+      );
+
     const today = new Date();
 
     const filteredSuiviDays = suiviDays.filter(
