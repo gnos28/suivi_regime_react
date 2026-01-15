@@ -85,7 +85,10 @@ const NutrimentsResume = ({ editedContent, autoAnalyze }: NutrimentsResumeProps)
                 value !== undefined &&
                 value !== null &&
                 value !== "" &&
-                value !== 0
+                (value !== 0 ||
+                  ["Calories", "Proteines", "Lipides", "Glucides"].includes(
+                    colName
+                  ))
               );
             })
             .filter((colName) => {
