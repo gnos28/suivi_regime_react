@@ -13,6 +13,7 @@ type RepasLineModalProps = {
   handleDelete?: () => void;
   content: string;
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
+  autoAnalyze?: boolean;
 };
 
 const RepasLineModal = ({
@@ -21,6 +22,7 @@ const RepasLineModal = ({
   handleDelete,
   content,
   dayTimeCol,
+  autoAnalyze,
 }: RepasLineModalProps) => {
   const [editedContent, setEditedContent] = useState(content);
   const [selectedTab, setSelectedTab] = useState<
@@ -100,7 +102,7 @@ const RepasLineModal = ({
             />
           )}
         </div>
-        <NutrimentsResume editedContent={editedContent} />
+        <NutrimentsResume editedContent={editedContent} autoAnalyze={autoAnalyze} />
         {showAutocompletion && (
           <Autocompletion
             editedContent={editedContent}

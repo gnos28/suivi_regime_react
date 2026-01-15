@@ -10,6 +10,8 @@ import DonutGroupIndexContext from "../../contexts/donutGroupIndexContext";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
 import AverageBar from "./AverageBar";
 
+import PhotoModal from "../PhotoModal/PhotoModal";
+
 type RepasSectionProps = {
   title: string;
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
@@ -18,6 +20,9 @@ type RepasSectionProps = {
 const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
   const [showRepas, setShowRepas] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [modalInitialContent, setModalInitialContent] = useState("");
+  const [autoAnalyze, setAutoAnalyze] = useState(false);
   const { donutGroupIndex } = useContext(DonutGroupIndexContext);
 
   const { database, suiviDays, handleAddLine, selectedSuiviDay, targets } =
@@ -98,22 +103,46 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
       {showRepas === true && (
         <div className={styles.repasSectionContent}>
           <RepasLines splitText={splitText} dayTimeCol={dayTimeCol} />
-          <div
-            className={[buttonStyles.btnGrad, styles.addButton].join(" ")}
-            onClick={() => setShowAddModal(true)}
-          >
-            <span>➕</span>
+          <div className={styles.actionsContainer}>
+            <div
+              className={[buttonStyles.btnGrad, styles.addButton].join(" ")}
+              onClick={() => {
+                setModalInitialContent("");
+                setAutoAnalyze(false);
+                setShowAddModal(true);
+              }}
+            >
+              <span>➕</span>
+            </div>
+            <div
+              className={[buttonStyles.btnGrad, styles.addButton].join(" ")}
+              onClick={() => setShowPhotoModal(true)}
+            >
+              <span>📸</span>
+            </div>
           </div>
           {showAddModal && (
             <RepasLineModal
               dayTimeCol={dayTimeCol}
-              content={""}
+              content={modalInitialContent}
               setEditing={setShowAddModal}
+              autoAnalyze={autoAnalyze}
               handleValidate={handleAddLine({
                 content: selectedSuiviDay?.[dayTimeCol],
                 dayTimeCol,
                 hideModal,
               })}
+            />
+          )}
+          {showPhotoModal && (
+            <PhotoModal
+              closeModal={() => setShowPhotoModal(false)}
+              onPhotoAnalyzed={(description) => {
+                setShowPhotoModal(false);
+                setModalInitialContent(description);
+                setAutoAnalyze(true);
+                setShowAddModal(true);
+              }}
             />
           )}
         </div>

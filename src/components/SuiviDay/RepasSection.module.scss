@@ -115,11 +115,21 @@
   //   max-width: 90vw;
 }
 
+.actionsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90vw;
+  max-width: 600px; /* Optional cap if needed */
+  gap: 16px;
+  align-self: center;
+}
+
 .addButton {
+  flex: 1; /* Allow buttons to grow and fill space */
   min-height: 62px;
-  min-width: 62px;
   height: 62px;
-  // width: 62px;
   padding: 0;
   margin: 0;
   font-size: 1.8rem;
@@ -127,27 +137,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  //   display: inline-block;*
-  // align-self: center;
-  // width: calc(100% - 4rem);
-  // max-width: 90vw;
-  // padding: 0.05rem 1rem;
-  // font-size: 2.5rem;
-  // font-weight: bold;
-  // color: #000;
-  // background-color: #ddd;
-  // border: none;
-  // border-radius: 4px;
-  // cursor: pointer;
-  // text-align: center;
-  // margin-bottom: 0.5rem;
-  // user-select: none;
-  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; /* Adding some radius as typically assumed for button groups */
 }
-.addButton:hover {
-  // transition: all 0.3s ease;
-  // background-color: #aaa;
-}
+
 
 @keyframes greyscaleToColoredLoop {
   0% {

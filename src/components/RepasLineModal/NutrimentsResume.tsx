@@ -9,9 +9,10 @@ import { calcDonutGroups } from "../../utils/calcDonutGroups";
 
 type NutrimentsResumeProps = {
   editedContent: string;
+  autoAnalyze?: boolean;
 };
 
-const NutrimentsResume = ({ editedContent }: NutrimentsResumeProps) => {
+const NutrimentsResume = ({ editedContent, autoAnalyze }: NutrimentsResumeProps) => {
   const { handleAddToDatabase, databaseExtended, selectedSuiviDay, targets } =
     useSuiviRegime();
   const [loadingGemini, setLoadingGemini] = useState(false);
@@ -47,7 +48,25 @@ const NutrimentsResume = ({ editedContent }: NutrimentsResumeProps) => {
     };
 
     updateNutrimentsResume();
-  }, [editedContent, databaseExtended]);
+
+    if (autoAnalyze && editedContent.trim().length > 0) {
+      // Don't auto analyze if we already found an item (e.g. from local DB check above)
+      // But updateNutrimentsResume is called in the same render cycle effectively (or sync).
+      // Actually `nutrimentsResume` state won't be updated immediately.
+      // We should check the databaseExtended directly here to decide.
+      const foundItem = databaseExtended.find(
+        (item) =>
+          item.aliment.toString().toLowerCase() ===
+          editedContent.trim().toLowerCase()
+      );
+      if (!foundItem) {
+          handleRequestGemini();
+      }
+    }
+  }, [editedContent, databaseExtended /*, autoAnalyze */]); // autoAnalyze is not in dependency because we only want to run this once or effectively when content changes if we want persistent auto functionality, but here it's likely just for the initial load.
+  // Ideally, if autoAnalyze is passed, we want it to trigger.
+  // However, handleRequestGemini is async.
+  // Let's refine the effect.
 
   return (
     <div

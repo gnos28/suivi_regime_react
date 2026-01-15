@@ -1,0 +1,125 @@
+.videoContainer {
+  width: 100%;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Reduced height to fit content better, but still large enough for preview */
+  min-height: 200px; 
+}
+
+/* Override properties from the shared modal class to make it compact */
+.modalContainer {
+  height: auto !important; 
+  justify-content: flex-start !important;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.videoFeed {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.capturedImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 10;
+}
+
+.loadingOverlay p {
+  margin-top: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px; /* Kept some margin but the container itself is now auto-height */
+  width: 100%;
+}
+
+.actionButton {
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s ease;
+}
+
+.actionButton:active {
+  transform: scale(0.95);
+}
+
+.captureButton {
+  background: white;
+  color: black;
+  border: 4px solid #ddd;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  justify-content: center;
+}
+
+.cancelButton {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.validateButton {
+  background-color: #4caf50;
+  color: white;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+}
+
+.loadingIcon {
+  animation: spin 2s linear infinite;
+  width: 64px;
+  height: 64px;
+}
+
+.analysisResult {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.05); /* slightly visible on white */
+  color: #333;
+  border-radius: 8px;
+  width: 100%;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
