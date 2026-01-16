@@ -12,7 +12,10 @@ type NutrimentsResumeProps = {
   autoAnalyze?: boolean;
 };
 
-const NutrimentsResume = ({ editedContent, autoAnalyze }: NutrimentsResumeProps) => {
+const NutrimentsResume = ({
+  editedContent,
+  autoAnalyze,
+}: NutrimentsResumeProps) => {
   const { handleAddToDatabase, databaseExtended, selectedSuiviDay, targets } =
     useSuiviRegime();
   const [loadingGemini, setLoadingGemini] = useState(false);
@@ -60,7 +63,7 @@ const NutrimentsResume = ({ editedContent, autoAnalyze }: NutrimentsResumeProps)
           editedContent.trim().toLowerCase()
       );
       if (!foundItem) {
-          handleRequestGemini();
+        handleRequestGemini();
       }
     }
   }, [editedContent, databaseExtended /*, autoAnalyze */]); // autoAnalyze is not in dependency because we only want to run this once or effectively when content changes if we want persistent auto functionality, but here it's likely just for the initial load.
@@ -120,7 +123,12 @@ const NutrimentsResume = ({ editedContent, autoAnalyze }: NutrimentsResumeProps)
               const vsAverage = calcVsAverage();
               const CalorieVsAverage = calcCalorieVsAverage();
 
-              return vsAverage && CalorieVsAverage;
+              return (
+                ["Calories", "Proteines", "Lipides", "Glucides"].includes(
+                  colName
+                ) ||
+                (vsAverage && CalorieVsAverage)
+              );
             })
             .map((colName) => (
               <NutrimentItem
