@@ -129,8 +129,14 @@ const PhotoModal = ({ closeModal, onPhotoAnalyzed }: PhotoModalProps) => {
 
         {analysisResult && (
           <div className={styles.analysisResult}>
-            <h4>Résultat de l'analyse :</h4>
-            <p>{analysisResult}</p>
+            <label htmlFor="analysis-edit">Résultat de l'analyse :</label>
+            <textarea
+              id="analysis-edit"
+              value={analysisResult}
+              onChange={(e) => setAnalysisResult(e.target.value)}
+              className={styles.resultTextarea}
+              placeholder="Modifiez le texte ici si nécessaire..."
+            />
           </div>
         )}
 
