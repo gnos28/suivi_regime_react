@@ -6,10 +6,10 @@ import {
 
 type CalcCarencesProps = {
   selectedSuiviDay:
-    | Record<SuiviColName, string | number | undefined>
+    | Partial<Record<SuiviColName, string | number | undefined>>
     | undefined;
   targets: { targetName: string; min?: string; max?: string }[];
-  database: Record<DatabaseColName, string | number | undefined>[];
+  database: Partial<Record<DatabaseColName, string | number | undefined>>[];
   dayTimes?: ("matin" | "midi" | "goûter" | "soir")[];
 };
 

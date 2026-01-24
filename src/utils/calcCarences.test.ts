@@ -3,7 +3,7 @@ import { calcCarences } from './calcCarences';
 import type { DatabaseColName } from '../types/globales';
 
 describe('calcCarences', () => {
-  const database: Record<DatabaseColName, string | number | undefined>[] = [
+  const database: Partial<Record<DatabaseColName, string | number | undefined>>[] = [
     { aliment: 'Orange', "Vitamine C": 50, Calories: 45 },
     { aliment: 'Steak', "Proteines": 25, "Fer": 2.5, Calories: 200 },
   ];
