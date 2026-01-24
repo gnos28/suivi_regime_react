@@ -29,41 +29,51 @@ describe('NutrimentItem', () => {
     }
   } as unknown as DatabaseExtended;
 
-  it('renders correctly with given props', () => {
+  it("renders correctly with given props", () => {
     render(
       <NutrimentItem
         colName="Proteines"
         donutGroups={mockDonutGroups}
         nutrimentsResume={mockNutrimentsResume}
+        quantity={1}
       />
     );
 
-    expect(screen.getByText('Prot')).toBeInTheDocument();
-    expect(screen.getByText('10.6')).toBeInTheDocument(); // 10.55 fixed to 1 decimal
-    expect(screen.getByText('g')).toBeInTheDocument();
+    expect(screen.getByText("Prot")).toBeInTheDocument();
+    expect(screen.getByText("10.6")).toBeInTheDocument(); // 10.55 fixed to 1 decimal
+    expect(screen.getByText("g")).toBeInTheDocument();
   });
 
-  it('applies correct background color and grayscale', () => {
+  it("calculates value with quantity correctly", () => {
+    render(
+      <NutrimentItem
+        colName="Proteines"
+        donutGroups={mockDonutGroups}
+        nutrimentsResume={mockNutrimentsResume}
+        quantity={2}
+      />
+    );
+
+    // 10.55 * 2 = 21.1
+    expect(screen.getByText("21.1")).toBeInTheDocument();
+  });
+
+  it("applies correct background color and grayscale via CSS variables", () => {
     const { container } = render(
       <NutrimentItem
         colName="Proteines"
         donutGroups={mockDonutGroups}
         nutrimentsResume={mockNutrimentsResume}
+        quantity={1}
       />
     );
 
     const div = container.firstChild as HTMLElement;
-    expect(div).toHaveStyle('background-color: rgb(255, 0, 0)'); // red
+    const style = div.style;
+
+    expect(style.getPropertyValue("--bg-color")).toBe("red");
     // Grayscale: 1 - min(1, 0.8) = 0.2
-    // Handle floating point precision issues
-    const style = window.getComputedStyle(div);
-    const filter = style.getPropertyValue('filter');
-    // grayscale(0.2) or grayscale(0.19999...)
-    const match = filter.match(/grayscale\(([\d\.]+)\)/);
-    expect(match).not.toBeNull();
-    if (match) {
-        expect(parseFloat(match[1])).toBeCloseTo(0.2);
-    }
+    expect(parseFloat(style.getPropertyValue("--grayscale"))).toBeCloseTo(0.2);
   });
 
   it('renders nothing if nutrimentsResume is null', () => {
@@ -72,6 +82,7 @@ describe('NutrimentItem', () => {
         colName="Proteines"
         donutGroups={mockDonutGroups}
         nutrimentsResume={null}
+        quantity={1}
       />
     );
     expect(container).toBeEmptyDOMElement();

@@ -33,7 +33,7 @@ describe('NutrimentsResume', () => {
          targets: mockTargets
      });
 
-    render(<NutrimentsResume editedContent="UnknownFood" />);
+    render(<NutrimentsResume editedContent="UnknownFood" quantity={1} />);
     
     expect(screen.getByText('Aucune information nutritionnelle disponible')).toBeInTheDocument();
     expect(screen.getByText('Demander à Gemini')).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe('NutrimentsResume', () => {
          targets: mockTargets
      });
 
-    render(<NutrimentsResume editedContent="UnknownFood" />);
+    render(<NutrimentsResume editedContent="UnknownFood" quantity={1} />);
     
     const button = screen.getByText('Demander à Gemini');
     fireEvent.click(button);
@@ -70,7 +70,7 @@ describe('NutrimentsResume', () => {
          targets: mockTargets
      });
 
-     render(<NutrimentsResume editedContent="Apple" />);
+     render(<NutrimentsResume editedContent="Apple" quantity={1} />);
      
      // Should verify that some NutrimentItem is rendered. 
      // Since NutrimentItem is complex, we might check for text presence if we didn't mock it,

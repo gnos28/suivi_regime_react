@@ -9,24 +9,30 @@ $width-nutriment-item: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.2rem;
-  border-radius: 4px;
-  border: 2px solid transparent;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  background-color: var(--bg-color);
+  border-color: var(--bg-color);
+  filter: grayscale(var(--grayscale));
 
   & > span:first-child {
-    font-size: 0.8rem;
-    color: #666;
+    font-size: 0.65rem;
+    color: #777;
+    line-height: 1;
   }
   & > span:nth-child(2) {
     font-size: 1.1rem;
-    font-weight: bold;
-    color: #000;
-    margin-top: -4px;
-    margin-bottom: -10px;
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1.1;
   }
   & > span:last-child {
-    font-size: 0.8rem;
-    color: #666;
+    font-size: 0.7rem;
+    color: #888;
+    line-height: 1;
   }
 }

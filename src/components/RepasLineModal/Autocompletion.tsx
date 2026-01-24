@@ -5,22 +5,19 @@ import styles from "./Autocompletion.module.scss";
 
 type AutocompletionProps = {
   editedContent: string;
-  setEditedContent: (content: string) => void;
-  closeAutocompletion: () => void;
+  onSelect: (content: string) => void;
 };
 
 const Autocompletion = ({
   editedContent,
-  setEditedContent,
-  closeAutocompletion,
+  onSelect,
 }: AutocompletionProps) => {
   const [autocompletion, setAutocompletion] = useState<string[]>([]);
 
   const { databaseExtended } = useSuiviRegime();
 
   const handleSuggestionClick = (suggestion: string) => {
-    setEditedContent(suggestion);
-    closeAutocompletion();
+    onSelect(suggestion);
   };
 
   useEffect(() => {
@@ -69,11 +66,11 @@ const Autocompletion = ({
 
   return (
     <>
-      <div className={styles.overtopMask} onClick={closeAutocompletion} />
-      <div className={styles.topMask} onClick={closeAutocompletion} />
-      <div className={styles.bottomMask} onClick={closeAutocompletion} />
-      <div className={styles.leftMask} onClick={closeAutocompletion} />
-      <div className={styles.rightMask} onClick={closeAutocompletion} />
+      <div className={styles.overtopMask} onClick={() => onSelect(editedContent)} />
+      <div className={styles.topMask} onClick={() => onSelect(editedContent)} />
+      <div className={styles.bottomMask} onClick={() => onSelect(editedContent)} />
+      <div className={styles.leftMask} onClick={() => onSelect(editedContent)} />
+      <div className={styles.rightMask} onClick={() => onSelect(editedContent)} />
       <div className={styles.autocompletionsContainer}>
         <div>
           {autocompletion

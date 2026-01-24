@@ -6,16 +6,17 @@ import NutrimentItem from "./NutrimentItem";
 import buttonStyles from "../../styles/button.module.scss";
 import styles from "./NutrimentsResume.module.scss";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
-import { isNutrimentRelevant } from "../../utils/displayUtils";
 
 type NutrimentsResumeProps = {
   editedContent: string;
   autoAnalyze?: boolean;
+  quantity: number;
 };
 
 const NutrimentsResume = ({
   editedContent,
   autoAnalyze,
+  quantity,
 }: NutrimentsResumeProps) => {
   const { handleAddToDatabase, databaseExtended, selectedSuiviDay, targets } =
     useSuiviRegime();
@@ -41,7 +42,7 @@ const NutrimentsResume = ({
       const foundItem = databaseExtended.find(
         (item) =>
           item.aliment.toString().toLowerCase() ===
-          editedContent.trim().toLowerCase()
+          editedContent.trim().toLowerCase(),
       );
 
       if (foundItem) {
@@ -54,23 +55,16 @@ const NutrimentsResume = ({
     updateNutrimentsResume();
 
     if (autoAnalyze && editedContent.trim().length > 0) {
-      // Don't auto analyze if we already found an item (e.g. from local DB check above)
-      // But updateNutrimentsResume is called in the same render cycle effectively (or sync).
-      // Actually `nutrimentsResume` state won't be updated immediately.
-      // We should check the databaseExtended directly here to decide.
       const foundItem = databaseExtended.find(
         (item) =>
           item.aliment.toString().toLowerCase() ===
-          editedContent.trim().toLowerCase()
+          editedContent.trim().toLowerCase(),
       );
       if (!foundItem) {
         handleRequestGemini();
       }
     }
-  }, [editedContent, databaseExtended /*, autoAnalyze */]); // autoAnalyze is not in dependency because we only want to run this once or effectively when content changes if we want persistent auto functionality, but here it's likely just for the initial load.
-  // Ideally, if autoAnalyze is passed, we want it to trigger.
-  // However, handleRequestGemini is async.
-  // Let's refine the effect.
+  }, [editedContent, databaseExtended /*, autoAnalyze */]);
 
   return (
     <div
@@ -83,20 +77,20 @@ const NutrimentsResume = ({
         <div className={styles.nutrimentsContainer}>
           {globales.databaseColNames
             .filter((colName) => colName !== "aliment")
-            .filter((colName) => isNutrimentRelevant(colName, nutrimentsResume))
             .map((colName) => (
               <NutrimentItem
                 key={colName}
                 colName={colName}
                 nutrimentsResume={nutrimentsResume}
                 donutGroups={donutGroups}
+                quantity={quantity}
               />
             ))}
         </div>
       ) : (
         <div
           className={[styles.nutrimentsContainer, styles.noNutriments].join(
-            " "
+            " ",
           )}
         >
           {editedContent.trim().length === 0 ? null : (

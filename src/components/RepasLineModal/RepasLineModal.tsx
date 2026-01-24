@@ -16,128 +16,209 @@ type RepasLineModalProps = {
   autoAnalyze?: boolean;
 };
 
+const quantities = [0, 0.25, 0.33, 0.5, 0.66, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
+
+// Helper function to parse the meal line
+const parseMealLine = (line: string) => {
+  const regex = /^\[(\d+(\.\d+)?|\d+\/\d+)\]\s*(.*)$/;
+  const match = line.match(regex);
+
+  if (match) {
+    let quantity = parseFloat(match[1]);
+    if (match[1].includes("/")) {
+      const parts = match[1].split("/").map(Number);
+      if (parts.length === 2 && parts[1] !== 0) {
+        quantity = parts[0] / parts[1];
+      }
+    }
+    return { quantity: quantity, text: match[3] };
+  }
+  return { quantity: 1, text: line };
+};
+
+// Helper function to format the meal line
+const formatMealLine = (quantity: number, text: string) => {
+  if (quantity === 1) {
+    return text;
+  }
+  // Special handling for 1/3 and 2/3 for display consistency
+  let quantityString = quantity.toString();
+  if (Math.abs(quantity - 0.33) < 0.01) {
+    quantityString = "1/3";
+  } else if (Math.abs(quantity - 0.66) < 0.01) {
+    quantityString = "2/3";
+  }
+  return `[${quantityString}] ${text}`;
+};
+
 const RepasLineModal = ({
+  content,
+  handleDelete,
   setEditing,
   handleValidate,
-  handleDelete,
-  content,
   dayTimeCol,
   autoAnalyze,
 }: RepasLineModalProps) => {
-  const [editedContent, setEditedContent] = useState(content);
+  const initialData = parseMealLine(content);
+  const [editedContent, setEditedContent] = useState(initialData.text);
+  const [quantity, setQuantity] = useState(initialData.quantity);
   const [selectedTab, setSelectedTab] = useState<
-    "habitudes" | "recent" | "suggestions"
-  >("habitudes");
+    "habitudes" | "recent" | "suggestions" | null
+  >(null);
 
   const [showAutocompletion, setShowAutocompletion] = useState(false);
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newEditedContent = e.target.value.replace(/\n/g, "");
+    // Block [ and ]
+    const newEditedContent = e.target.value.replace(/[\n[\]]/g, "");
     setEditedContent(newEditedContent);
     if (showAutocompletion == false && newEditedContent.length > 0)
       setShowAutocompletion(true);
-    if (showAutocompletion == true && newEditedContent.length === 0)
-      setShowAutocompletion(false);
   };
 
-  const closeAutocompletion = () => {
+  const handleAutocompletionClick = (aliment: string) => {
+    setEditedContent(aliment);
     setShowAutocompletion(false);
+  };
+
+  const handleTabClick = (tab: "habitudes" | "recent" | "suggestions") => {
+    setSelectedTab(selectedTab === tab ? null : tab);
   };
 
   return (
     <div
       className={modalStyles.modalBackground}
-      onClick={() => {
-        setEditing(false);
-      }}
+      onClick={() => setEditing(false)}
     >
       <div
         className={[modalStyles.modalContainer, styles.modalContainer].join(
-          " "
+          " ",
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.suggestionsSection}>
-          <div className={styles.tabSelector}>
-            <h2
-              className={selectedTab === "habitudes" ? styles.selectedTab : ""}
-              onClick={() => setSelectedTab("habitudes")}
-            >
-              📋 Mes habitudes
-            </h2>
-            <h2
-              className={selectedTab === "recent" ? styles.selectedTab : ""}
-              onClick={() => setSelectedTab("recent")}
-            >
-              ⏰ Récents
-            </h2>
-            <h2
-              className={
-                selectedTab === "suggestions" ? styles.selectedTab : ""
-              }
-              onClick={() => setSelectedTab("suggestions")}
-            >
-              ✨ Suggestions
-            </h2>
-          </div>
-          {selectedTab === "habitudes" && (
-            <Habitudes
-              dayTimeCol={dayTimeCol}
-              setEditedContent={setEditedContent}
-              editedContent={editedContent}
-            />
-          )}
-          {selectedTab === "recent" && (
-            <Recents
-              dayTimeCol={dayTimeCol}
-              editedContent={editedContent}
-              setEditedContent={setEditedContent}
-            />
-          )}
-          {selectedTab === "suggestions" && (
-            <Suggestions
-              dayTimeCol={dayTimeCol}
-              editedContent={editedContent}
-              setEditedContent={setEditedContent}
-            />
-          )}
+        <div className={styles.tabSelector}>
+          <h2
+            className={[
+              styles.tabItem,
+              selectedTab === "habitudes" ? styles.selectedTab : "",
+            ].join(" ")}
+            onClick={() => handleTabClick("habitudes")}
+          >
+            <span className={styles.tabIcon}>📋</span>
+            <span className={styles.tabLabel}>Mes habitudes</span>
+          </h2>
+
+          <h2
+            className={[
+              styles.tabItem,
+              selectedTab === "recent" ? styles.selectedTab : "",
+            ].join(" ")}
+            onClick={() => handleTabClick("recent")}
+          >
+            <span className={styles.tabIcon}>⏰</span>
+            <span className={styles.tabLabel}>Récents</span>
+          </h2>
+
+          <h2
+            className={[
+              styles.tabItem,
+              selectedTab === "suggestions" ? styles.selectedTab : "",
+            ].join(" ")}
+            onClick={() => handleTabClick("suggestions")}
+          >
+            <span className={styles.tabIcon}>✨</span>
+            <span className={styles.tabLabel}>Suggestions</span>
+          </h2>
         </div>
-        <NutrimentsResume editedContent={editedContent} autoAnalyze={autoAnalyze} />
+
+        {selectedTab !== null ? (
+          <div className={styles.expandedTabContent}>
+            {selectedTab === "habitudes" && (
+              <Habitudes
+                dayTimeCol={dayTimeCol}
+                setEditedContent={setEditedContent}
+                editedContent={editedContent}
+              />
+            )}
+            {selectedTab === "recent" && (
+              <Recents
+                dayTimeCol={dayTimeCol}
+                editedContent={editedContent}
+                setEditedContent={setEditedContent}
+              />
+            )}
+            {selectedTab === "suggestions" && (
+              <Suggestions
+                dayTimeCol={dayTimeCol}
+                editedContent={editedContent}
+                setEditedContent={setEditedContent}
+              />
+            )}
+          </div>
+        ) : (
+          <div className={styles.contentSection}>
+            <NutrimentsResume
+              editedContent={editedContent}
+              autoAnalyze={autoAnalyze}
+              quantity={quantity}
+            />
+
+            <div className={styles.quantitySection}>
+              <div className={styles.quantityHeader}>
+                <span className={styles.quantityLabel}>Quantité</span>
+                <span className={styles.quantityValue}>{quantity}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max={quantities.length - 1}
+                step="1"
+                value={quantities.indexOf(quantity)}
+                onChange={(e) =>
+                  setQuantity(quantities[parseInt(e.target.value)])
+                }
+                className={styles.quantitySlider}
+              />
+            </div>
+
+            <div className={styles.editContainer}>
+              <textarea
+                name="editedContent"
+                id="editedContent"
+                value={editedContent}
+                onChange={handleTextareaChange}
+                className={styles.modalInput}
+                rows={3}
+                placeholder="Saisissez votre repas..."
+              />
+            </div>
+          </div>
+        )}
+
         {showAutocompletion && (
           <Autocompletion
             editedContent={editedContent}
-            setEditedContent={setEditedContent}
-            closeAutocompletion={closeAutocompletion}
+            onSelect={handleAutocompletionClick}
           />
         )}
 
-        <div className={styles.editContainer}>
-          <textarea
-            name="editedContent"
-            id="editedContent"
-            value={editedContent}
-            onChange={handleTextareaChange}
-            className={styles.modalInput}
-            rows={4}
+        <div className={styles.buttonsContainer}>
+          <button
+            onClick={() =>
+              handleValidate(formatMealLine(quantity, editedContent))
+            }
+            className={[styles.button, styles.validateButton].join(" ")}
           >
-            {editedContent}
-          </textarea>
-          <div className={styles.buttonsContainer}>
+            Valider
+          </button>
+          {handleDelete !== undefined && (
             <button
-              onClick={() => handleValidate(editedContent)}
-              className={[styles.button, styles.validateButton].join(" ")}
+              onClick={handleDelete}
+              className={[styles.button, styles.cancelButton].join(" ")}
             >
-              Valider
+              Supprimer
             </button>
-            {handleDelete !== undefined && (
-              <button
-                onClick={handleDelete}
-                className={[styles.button, styles.cancelButton].join(" ")}
-              >
-                Supprimer
-              </button>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
