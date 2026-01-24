@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./PhotoModal.module.scss";
 import modalStyles from "../../styles/modal.module.scss";
 import { fetchAnalyzePhoto } from "../../api/fetchAnalyzePhoto";
+import { cleanPhotoDescription } from "../../utils/textUtils";
 
 type PhotoModalProps = {
   closeModal: () => void;
@@ -76,7 +77,8 @@ const PhotoModal = ({ closeModal, onPhotoAnalyzed }: PhotoModalProps) => {
       // user also said: "le endpoint va ensuite analyser la photo ... et déterminité la composition"
       // "afficher le retour du endpoint ... l'utilisateur peut alors valider ou non"
       
-      const description = response.description || JSON.stringify(response);
+      let description = response.description || JSON.stringify(response);
+      description = cleanPhotoDescription(description);
       setAnalysisResult(description);
     } catch (error) {
       console.error("Error analyzing photo:", error);

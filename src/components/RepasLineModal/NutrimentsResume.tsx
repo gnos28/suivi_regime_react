@@ -6,6 +6,7 @@ import NutrimentItem from "./NutrimentItem";
 import buttonStyles from "../../styles/button.module.scss";
 import styles from "./NutrimentsResume.module.scss";
 import { calcDonutGroups } from "../../utils/calcDonutGroups";
+import { isNutrimentRelevant } from "../../utils/displayUtils";
 
 type NutrimentsResumeProps = {
   editedContent: string;
@@ -82,54 +83,7 @@ const NutrimentsResume = ({
         <div className={styles.nutrimentsContainer}>
           {globales.databaseColNames
             .filter((colName) => colName !== "aliment")
-            .filter((colName) => {
-              const value = nutrimentsResume[colName];
-              return (
-                value !== undefined &&
-                value !== null &&
-                value !== "" &&
-                (value !== 0 ||
-                  ["Calories", "Proteines", "Lipides", "Glucides"].includes(
-                    colName
-                  ))
-              );
-            })
-            .filter((colName) => {
-              const calcVsAverage = () => {
-                if (colName === "Calories") return true;
-
-                const nutrimentVsAverage =
-                  nutrimentsResume.nutrimentVsAverage[colName];
-
-                if (nutrimentVsAverage > 0.25) return true;
-                return false;
-              };
-
-              const calcCalorieVsAverage = () => {
-                if (
-                  colName === "Calories" ||
-                  colName === "soluble / insoluble" ||
-                  colName === "Ω3 / Ω6"
-                )
-                  return true;
-
-                const nutrimentByCalorieVsAverage =
-                  nutrimentsResume.nutrimentByCalorieVsAverage[colName];
-
-                if (nutrimentByCalorieVsAverage > 0.8) return true;
-                return false;
-              };
-
-              const vsAverage = calcVsAverage();
-              const CalorieVsAverage = calcCalorieVsAverage();
-
-              return (
-                ["Calories", "Proteines", "Lipides", "Glucides"].includes(
-                  colName
-                ) ||
-                (vsAverage && CalorieVsAverage)
-              );
-            })
+            .filter((colName) => isNutrimentRelevant(colName, nutrimentsResume))
             .map((colName) => (
               <NutrimentItem
                 key={colName}

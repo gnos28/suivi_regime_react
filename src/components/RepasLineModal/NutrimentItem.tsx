@@ -2,6 +2,7 @@ import type { DatabaseExtended } from "../../types/databaseExtended";
 import type { DatabaseColName } from "../../types/globales";
 import type { DonutGroupItem } from "../../utils/calcDonutGroups";
 import styles from "./NutrimentItem.module.scss";
+import { calcNutrimentGrayscale } from "../../utils/displayUtils";
 
 type NutrimentItemProps = {
   colName: DatabaseColName;
@@ -31,30 +32,13 @@ const NutrimentItem = ({
     return value;
   };
 
-  const calcGrayScale = () => {
-    if (
-      colName === "aliment" ||
-      colName === "soluble / insoluble" ||
-      colName === "Ω3 / Ω6" ||
-      colName === "Calories"
-    )
-      return 0;
-
-    const nutrimentByCalorieVsAverage =
-      nutrimentsResume.nutrimentByCalorieVsAverage[colName];
-
-    const grayscaleValue = 1 - Math.min(1, nutrimentByCalorieVsAverage);
-
-    return grayscaleValue;
-  };
-
   const backgroundColor = donutGroupItem?.colorValue ?? "transparent";
 
   const name = donutGroupItem?.nameAbbr ?? colName;
   const value = valueFormatted(nutrimentsResume[colName] ?? "N/A");
   const unit = donutGroupItem?.unit ?? "";
 
-  const grayscale = calcGrayScale();
+  const grayscale = calcNutrimentGrayscale(colName, nutrimentsResume);
 
   return (
     <div
