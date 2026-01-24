@@ -22,3 +22,26 @@ export const removeAccents = (
   if (dayTimeColOrSymptom === "nausées") return "nausees";
   return dayTimeColOrSymptom;
 };
+
+export const parseMealLine = (
+  line: string
+): { quantity: number; text: string } => {
+  const trimmedLine = (line || "").trim();
+  const match = trimmedLine.match(/^\[([\d.]+)\]\s*(.*)$/);
+  if (match) {
+    const quantity = parseFloat(match[1]);
+    return { quantity: isNaN(quantity) ? 1 : quantity, text: match[2].trim() };
+  }
+  return { quantity: 1, text: trimmedLine };
+};
+
+export const formatMealLine = (quantity: number, text: string): string => {
+  if (quantity === 1) return text;
+  return `[${quantity}] ${text}`;
+};
+
+export const formatQuantityDisplay = (quantity: number): string => {
+  if (quantity === 1) return "";
+  if (quantity < 1) return `${Math.round(quantity * 100)}%`;
+  return `x${quantity}`;
+};

@@ -3,6 +3,7 @@ import {
   type DatabaseColName,
   type SuiviColName,
 } from "../types/globales";
+import { parseMealLine } from "./utils";
 
 type CalcCarencesProps = {
   selectedSuiviDay:
@@ -31,16 +32,17 @@ export const calcCarences = ({
 
   const nutrimentsData = globales.nutrimentsColNames.map((nutriment) => {
     const dayValue = meats.reduce((acc, meat) => {
+      const { quantity, text } = parseMealLine(meat);
       const dbItem = database.find(
         (dbEntry) =>
-          dbEntry.aliment?.toString().toLowerCase() === meat.toLowerCase()
+          dbEntry.aliment?.toString().toLowerCase() === text.toLowerCase()
       );
 
       const itemValue = dbItem !== undefined ? dbItem[nutriment] ?? 0 : 0;
 
       const itemValueFloat = parseFloat(itemValue.toString());
 
-      return acc + (isNaN(itemValueFloat) ? 0 : itemValueFloat);
+      return acc + (isNaN(itemValueFloat) ? 0 : itemValueFloat) * quantity;
     }, 0);
 
     // const dayValue = selectedSuiviDay?.[nutriment]

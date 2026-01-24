@@ -65,7 +65,7 @@ describe('calcCarences', () => {
   it('does not return non-deficient items', () => {
      // Eating 2 Oranges: 100 Vit C. Target 80. Ratio 1.25. Not deficient.
      const selectedSuiviDay = {
-       matin: 'Orange\nOrange',
+       matin: '[2] Orange',
      };
      const result = calcCarences({
        selectedSuiviDay,
@@ -73,5 +73,19 @@ describe('calcCarences', () => {
        database
      });
      expect(result).toHaveLength(0);
+  });
+
+  it('handles quantity modifiers', () => {
+     // Eating 0.5 Steak: 12.5 Prot. Target 50. Ratio 0.25. Deficient.
+     const selectedSuiviDay2 = {
+       matin: '[0.5] Steak',
+     };
+     const result2 = calcCarences({
+       selectedSuiviDay: selectedSuiviDay2,
+       targets: [{ targetName: 'Proteines', min: '50' }],
+       database
+     });
+     expect(result2).toHaveLength(1);
+     expect(result2[0].carence).toBe(0.25);
   });
 });

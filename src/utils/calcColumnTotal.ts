@@ -1,4 +1,5 @@
 import type { DatabaseColName } from "../types/globales";
+import { parseMealLine } from "./utils";
 
 type CalcColumnTotalProps = {
   periods: string[];
@@ -28,16 +29,17 @@ export const calcColumnTotal =
         const mealItems = (meals ?? "").toString().split("\n");
 
         return mealItems.reduce((total, item) => {
+          const { quantity, text } = parseMealLine(item);
           const dbItem = database.find(
             (dbEntry) =>
-              dbEntry.aliment?.toString().toLowerCase() === item.toLowerCase()
+              dbEntry.aliment?.toString().toLowerCase() === text.toLowerCase()
           );
 
           const itemValue = dbItem !== undefined ? dbItem[columnName] ?? 0 : 0;
 
           const itemValueFloat = avoidNaN(parseFloat(itemValue.toString()));
 
-          return total + itemValueFloat;
+          return total + itemValueFloat * quantity;
         }, 0);
       })
       .reduce((acc, val) => acc + val, 0);
