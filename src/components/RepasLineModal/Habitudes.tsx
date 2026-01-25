@@ -37,9 +37,10 @@ const Habitudes = ({
 
       const sortedAliments = Object.entries(alimentCount)
         .sort((a, b) => b[1] - a[1])
-        .map(([aliment]) => aliment);
+        .map(([aliment]) => aliment)
+        .filter((aliment) => aliment !== "-");
 
-      setMostUsedAliments(sortedAliments.slice(0, 10));
+      setMostUsedAliments(sortedAliments.slice(0, 30));
     };
 
     calcMostUsedAliments();
@@ -48,7 +49,7 @@ const Habitudes = ({
   return (
     <div className={styles.suggestionsContainer}>
       <div>
-        {mostUsedAliments.slice(0, 7).map((suggestion, index) => (
+        {mostUsedAliments.map((suggestion, index) => (
           <div
             key={index}
             className={[

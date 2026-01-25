@@ -6,6 +6,7 @@ import Autocompletion from "./Autocompletion";
 import Habitudes from "./Habitudes";
 import Suggestions from "./Suggestions";
 import Recents from "./Recents";
+import { parseMealLine } from "../../utils/utils";
 
 type RepasLineModalProps = {
   setEditing: (editing: boolean) => void;
@@ -18,36 +19,14 @@ type RepasLineModalProps = {
 
 const quantities = [0, 0.25, 0.33, 0.5, 0.66, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
 
-// Helper function to parse the meal line
-const parseMealLine = (line: string) => {
-  const regex = /^\[(\d+(\.\d+)?|\d+\/\d+)\]\s*(.*)$/;
-  const match = line.match(regex);
-
-  if (match) {
-    let quantity = parseFloat(match[1]);
-    if (match[1].includes("/")) {
-      const parts = match[1].split("/").map(Number);
-      if (parts.length === 2 && parts[1] !== 0) {
-        quantity = parts[0] / parts[1];
-      }
-    }
-    return { quantity: quantity, text: match[3] };
-  }
-  return { quantity: 1, text: line };
-};
-
 // Helper function to format the meal line
 const formatMealLine = (quantity: number, text: string) => {
   if (quantity === 1) {
     return text;
   }
   // Special handling for 1/3 and 2/3 for display consistency
-  let quantityString = quantity.toString();
-  if (Math.abs(quantity - 0.33) < 0.01) {
-    quantityString = "1/3";
-  } else if (Math.abs(quantity - 0.66) < 0.01) {
-    quantityString = "2/3";
-  }
+  const quantityString = quantity.toString();
+
   return `[${quantityString}] ${text}`;
 };
 

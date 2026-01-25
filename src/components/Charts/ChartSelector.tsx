@@ -1,6 +1,5 @@
-import type { SuiviColName } from "../../types/globales";
+import { dataGroups, type SuiviColName } from "../../types/globales";
 import styles from "./ChartSelector.module.scss";
-import { dataGroups } from "./constants";
 
 type ChartSelectorProps = {
   selectedDataGroup: SuiviColName[];
@@ -15,7 +14,7 @@ const ChartSelector = ({
     const currentIndex = dataGroups.findIndex(
       (group) =>
         group.length === selectedDataGroup.length &&
-        group.every((colName, index) => colName === selectedDataGroup[index])
+        group.every((colName, index) => colName === selectedDataGroup[index]),
     );
     const previousIndex =
       (currentIndex - 1 + dataGroups.length) % dataGroups.length;
@@ -26,7 +25,7 @@ const ChartSelector = ({
     const currentIndex = dataGroups.findIndex(
       (group) =>
         group.length === selectedDataGroup.length &&
-        group.every((colName, index) => colName === selectedDataGroup[index])
+        group.every((colName, index) => colName === selectedDataGroup[index]),
     );
     const nextIndex = (currentIndex + 1) % dataGroups.length;
     setSelectedDataGroup(dataGroups[nextIndex]);

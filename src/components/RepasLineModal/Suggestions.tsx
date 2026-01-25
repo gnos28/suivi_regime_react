@@ -4,6 +4,7 @@ import type { DatabaseExtended } from "../../types/databaseExtended";
 import { calcCarences } from "../../utils/calcCarences";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import type { NutrimentsColName } from "../../types/globales";
+import { removeBracketsFromText } from "../../utils/textUtils";
 
 type SuggestionsProps = {
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
@@ -53,13 +54,13 @@ const Suggestions = ({
               return aliments;
             })
             .flat()
-            .map((aliment) => aliment.trim().toLowerCase())
+            .map((aliment) => aliment.trim().toLowerCase()),
         ),
       ].map((aliment) => {
         databaseExtended.find(
           (item) =>
             item.aliment.toString().toLowerCase() ===
-            aliment.trim().toLowerCase()
+            aliment.trim().toLowerCase(),
         );
         return aliment;
       });
@@ -70,13 +71,13 @@ const Suggestions = ({
             const aliment = databaseExtended.find(
               (item) =>
                 item.aliment.toString().toLowerCase() ===
-                alimentString.trim().toLowerCase()
+                alimentString.trim().toLowerCase(),
             );
 
             const alreadyIncluded = selectedSuiviDay?.[dayTimeCol]
               ?.toString()
               .split("\n")
-              .map((item) => item.trim().toLowerCase())
+              .map((item) => removeBracketsFromText(item.trim().toLowerCase()))
               .includes(alimentString.trim().toLowerCase());
 
             const alimentBoost = alreadyIncluded ? -1000 : 1;
@@ -89,7 +90,7 @@ const Suggestions = ({
               const carenceMultiplier = 1 - (carence.carence ?? 1);
 
               const nutrimentBoost = boostedNutriments.includes(
-                carence.nutriment
+                carence.nutriment,
               )
                 ? 10
                 : 1;
@@ -124,7 +125,7 @@ const Suggestions = ({
         }[]
       ).sort((a, b) => b.score - a.score);
 
-      setSuggestions(alimentScores);
+      setSuggestions(alimentScores.slice(0, 30));
     };
 
     updateSuggestions();
@@ -133,7 +134,7 @@ const Suggestions = ({
   return (
     <div className={styles.suggestionsContainer}>
       <div>
-        {suggestions.slice(0, 10).map((suggestion, index) => (
+        {suggestions.map((suggestion, index) => (
           <div
             key={index}
             className={[

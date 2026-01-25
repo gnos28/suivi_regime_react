@@ -45,6 +45,20 @@ div.modalContainer {
   }
 }
 
+.suggestionsSection {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  height: 30%;
+  // border-bottom: 1px solid #ccc;
+  margin-bottom: 1rem;
+  // border: 1px solid red;
+}
+
 .suggestionsContainer {
   display: flex;
   flex-direction: column;
@@ -68,11 +82,28 @@ div.modalContainer {
   // background-color: lightgreen;
 }
 
-.contentSection, .expandedTabContent {
+.suggestionItem {
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  color: black;
+  // background-color: #f0f0f0;
+  background: linear-gradient(90deg, #e0e0e0, #fff);
+}
+.suggestionItem:hover {
+  background-color: #d0d0d0;
+}
+
+.selectedSuggestion {
+  font-weight: bold;
+}
+
+.contentSection,
+.expandedTabContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
   height: 40%;
@@ -81,11 +112,8 @@ div.modalContainer {
   margin-bottom: 1rem;
 }
 
-.quantityValue {
-  font-size: 3.5rem; // Bigger font for value
-  font-weight: 400; // Thinner weight
-  color: #000;
-  line-height: 1;
+.expandedTabContent {
+  margin-top: 4px;
 }
 
 .quantitySection {
@@ -97,38 +125,65 @@ div.modalContainer {
   width: 100%;
   height: 50px;
   color: gray;
-}
 
-.quantitySlider {
-  width: 100%;
-  height: 6px; // Thinner track
-  border-radius: 3px;
-  background: #e0e0e0; // Lighter track
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  margin-top: 0.5rem;
+  .quantityHeader {
+    height: 80px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 28px; // Slightly larger thumb
-    height: 28px;
-    border-radius: 50%;
-    background: #e68a6e;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border: 3px solid #fff; // White border for 'ring' effect
+    .quantityLabel {
+      font-size: 0.8rem;
+      color: #555;
+      position: absolute;
+      top: -5px;
+    }
+    .quantityValue {
+      font-size: 2.5rem; // Bigger font for value
+      font-weight: 400; // Thinner weight
+      color: #000;
+      line-height: 1;
+      width: 80px;
+      display: block;
+      text-align: center;
+      overflow: hidden;
+    }
   }
 
-  &::-moz-range-thumb {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #e68a6e;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border: 3px solid #fff;
+  .quantitySlider {
+    width: 100%;
+    height: 6px; // Thinner track
+    border-radius: 3px;
+    background: #e0e0e0; // Lighter track
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: 0.5rem;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px; // Slightly larger thumb
+      height: 28px;
+      border-radius: 50%;
+      background: grey;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border: 3px solid #fff; // White border for 'ring' effect
+    }
+
+    &::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: grey;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border: 3px solid #fff;
+    }
   }
 }
 
@@ -143,15 +198,12 @@ div.modalContainer {
   // flex-grow: 1;
   gap: 1rem;
   width: 100%;
-  // min-height: 34%;
-  // height: 160px;
   overflow-y: auto;
 }
 
 .modalInput {
   width: calc(100% - 1.2rem);
-  // height: 100%;
-  height: 160px;
+  height: 90px;
   font-size: 1rem;
   padding: 0.5rem;
   border: 1px solid #ccc;

@@ -1,10 +1,10 @@
 import type { DatabaseExtended } from "../../types/databaseExtended";
-import type { DatabaseColName } from "../../types/globales";
+import type { NutrimentsColName } from "../../types/globales";
 import type { DonutGroupItem } from "../../utils/calcDonutGroups";
 import styles from "./NutrimentItem.module.scss";
 
 type NutrimentItemProps = {
-  colName: DatabaseColName;
+  colName: NutrimentsColName;
   nutrimentsResume: DatabaseExtended | null;
   donutGroups: DonutGroupItem[];
   quantity: number;
@@ -22,14 +22,22 @@ const NutrimentItem = ({
 
   const valueFormatted = (value: string | number) => {
     if (typeof value === "number") {
-      return value.toFixed(donutGroupItem?.unitDecimals ?? 0);
+      const unitDecimals = value >= 1000 ? 0 : donutGroupItem?.unitDecimals;
+
+      return value.toFixed(unitDecimals ?? 0);
     }
     return value;
   };
 
+  const valueShouldBeShrinked = (value: string | number) => {
+    if (typeof value === "number") {
+      return value >= 10000;
+    }
+    return false;
+  };
+
   const calcGrayScale = () => {
     if (
-      colName === "aliment" ||
       colName === "soluble / insoluble" ||
       colName === "Ω3 / Ω6" ||
       colName === "Calories"
@@ -57,10 +65,18 @@ const NutrimentItem = ({
   const value = valueFormatted(valueProcessed ?? "N/A");
   const unit = donutGroupItem?.unit ?? "";
 
+  const isBigger =
+    colName === "Calories" ||
+    colName === "Proteines" ||
+    colName === "Lipides" ||
+    colName === "Glucides";
+
+  const shrinkValue = valueShouldBeShrinked(valueProcessed ?? 0);
+
   return (
     <div
       key={colName}
-      className={styles.nutrimentItem}
+      className={`${styles.nutrimentItem} ${isBigger ? styles.bigNutriment : ""}`}
       style={
         {
           "--bg-color": backgroundColor,
@@ -69,7 +85,7 @@ const NutrimentItem = ({
       }
     >
       <span>{name}</span>
-      <span>{value}</span>
+      <span className={shrinkValue ? styles.shrinkValue : ""}>{value}</span>
       <span>{unit}</span>
     </div>
   );

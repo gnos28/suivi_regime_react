@@ -75,17 +75,19 @@ const NutrimentsResume = ({
     >
       {nutrimentsResume ? (
         <div className={styles.nutrimentsContainer}>
-          {globales.databaseColNames
-            .filter((colName) => colName !== "aliment")
-            .map((colName) => (
-              <NutrimentItem
-                key={colName}
-                colName={colName}
-                nutrimentsResume={nutrimentsResume}
-                donutGroups={donutGroups}
-                quantity={quantity}
-              />
-            ))}
+          {globales.nutrimentGroups.map((nutrimentGroup) => (
+            <div className={styles.nutrimentsGroupContainer}>
+              {nutrimentGroup.map((colName) => (
+                <NutrimentItem
+                  key={colName}
+                  colName={colName}
+                  nutrimentsResume={nutrimentsResume}
+                  donutGroups={donutGroups}
+                  quantity={quantity}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       ) : (
         <div

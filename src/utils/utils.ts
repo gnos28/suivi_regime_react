@@ -1,3 +1,5 @@
+import { extractQuantityFromText, removeBracketsFromText } from "./textUtils";
+
 export const convertJsonStringToDate = (dateString: string | number) =>
   new Date(dateString);
 
@@ -16,7 +18,7 @@ export const removeAccents = (
     | "soir"
     | "ballonnements"
     | "selles"
-    | "nausées"
+    | "nausées",
 ) => {
   if (dayTimeColOrSymptom === "goûter") return "gouter";
   if (dayTimeColOrSymptom === "nausées") return "nausees";
@@ -24,15 +26,14 @@ export const removeAccents = (
 };
 
 export const parseMealLine = (
-  line: string
+  line: string,
 ): { quantity: number; text: string } => {
   const trimmedLine = (line || "").trim();
-  const match = trimmedLine.match(/^\[([\d.]+)\]\s*(.*)$/);
-  if (match) {
-    const quantity = parseFloat(match[1]);
-    return { quantity: isNaN(quantity) ? 1 : quantity, text: match[2].trim() };
-  }
-  return { quantity: 1, text: trimmedLine };
+
+  const quantity = extractQuantityFromText(trimmedLine);
+  const text = removeBracketsFromText(trimmedLine);
+
+  return { quantity, text };
 };
 
 export const formatMealLine = (quantity: number, text: string): string => {

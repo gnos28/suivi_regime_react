@@ -18,7 +18,7 @@ const dayTimeRules: Record<
   soir: ["soir", "midi"],
 };
 
-const NB_DAYS_FOR_RECENT = 3;
+const NB_DAYS_FOR_RECENT = 4;
 
 const Recents = ({
   dayTimeCol,
@@ -62,7 +62,7 @@ const Recents = ({
   return (
     <div className={styles.suggestionsContainer}>
       <div>
-        {recentAliments.slice(0, 7).map((suggestion, index) => (
+        {recentAliments.map((suggestion, index) => (
           <div
             key={index}
             className={[

@@ -52,6 +52,7 @@
   font-size: 1.8rem;
   font-weight: bold;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-right: 0.5rem;
@@ -63,10 +64,29 @@
   // text-align: center;
   // user-select: none;
   // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  position: relative;
+
+  .editIconWithQuantity {
+    display: block;
+    font-size: 1.2rem;
+    margin-top: -24px;
+  }
+
+  .quantity {
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: -20px;
+    width: 62px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: none;
+    text-align: center;
+  }
 }
 .editButton:hover {
-  // transition: all 0.3s ease;
-  // background-color: #aaa;
+  color: #000;
 }
 
 @keyframes greyscaleToColoredLoop {

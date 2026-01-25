@@ -11,6 +11,7 @@ import { calcDonutGroups } from "../../utils/calcDonutGroups";
 import AverageBar from "./AverageBar";
 
 import PhotoModal from "../PhotoModal/PhotoModal";
+import { removeBracketsFromText } from "../../utils/textUtils";
 
 type RepasSectionProps = {
   title: string;
@@ -47,10 +48,10 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
     dayTimeCol === "matin"
       ? "/matin.webp"
       : dayTimeCol === "midi"
-      ? "/midi.webp"
-      : dayTimeCol === "goûter"
-      ? "/aprem.webp"
-      : "/soir.webp";
+        ? "/midi.webp"
+        : dayTimeCol === "goûter"
+          ? "/aprem.webp"
+          : "/soir.webp";
 
   const splitText = (selectedSuiviDay?.[dayTimeCol] ?? "")
     .toString()
@@ -60,8 +61,10 @@ const RepasSection = ({ title, dayTimeCol }: RepasSectionProps) => {
   const hasNotInDatabaseItems = splitText.some(
     (line) =>
       database.some(
-        (item) => item.aliment.toString().toLowerCase() === line.toLowerCase()
-      ) === false
+        (item) =>
+          item.aliment.toString().toLowerCase() ===
+          removeBracketsFromText(line.toLowerCase()),
+      ) === false,
   );
 
   const donutGroups = calcDonutGroups({

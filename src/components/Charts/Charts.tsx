@@ -2,18 +2,18 @@ import { useState } from "react";
 import ChartDisplay from "./ChartDisplay";
 import styles from "./Charts.module.scss";
 import TimeSelector from "./TimeSelector";
-import type { SuiviColName } from "../../types/globales";
-import { type TimeRange, timeRanges, dataGroups } from "./constants";
+import { dataGroups, type SuiviColName } from "../../types/globales";
+import { type TimeRange, timeRanges } from "./constants";
 
 const Charts = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(
-    timeRanges[0]
+    timeRanges[0],
   );
   const [selectedDataGroup1, setSelectedDataGroup1] = useState<SuiviColName[]>(
-    dataGroups[0]
+    dataGroups[0],
   );
   const [selectedDataGroup2, setSelectedDataGroup2] = useState<SuiviColName[]>(
-    dataGroups[1]
+    dataGroups[1],
   );
 
   return (

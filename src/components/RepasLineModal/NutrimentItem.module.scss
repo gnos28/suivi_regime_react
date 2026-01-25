@@ -1,5 +1,5 @@
 $height-nutriment-item: 61px;
-$width-nutriment-item: 56px;
+$width-nutriment-item: 50px;
 
 .nutrimentItem {
   flex-grow: 0;
@@ -34,5 +34,23 @@ $width-nutriment-item: 56px;
     font-size: 0.7rem;
     color: #888;
     line-height: 1;
+  }
+  & > span.shrinkValue {
+    font-size: 0.9rem;
+  }
+}
+
+.bigNutriment {
+  height: $height-nutriment-item + 10px;
+  width: $width-nutriment-item + 10px;
+
+  & > span:first-child {
+    font-size: 0.75rem;
+  }
+  & > span:nth-child(2) {
+    font-size: 1.3rem;
+  }
+  & > span:last-child {
+    font-size: 0.8rem;
   }
 }

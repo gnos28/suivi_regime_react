@@ -14,13 +14,13 @@ export const calcColumnTotal =
     if (columnName === "soluble / insoluble")
       return avoidNaN(
         calcColumnTotal({ periods, database })("fibre solubles") /
-          calcColumnTotal({ periods, database })("fibres insolubles")
+          calcColumnTotal({ periods, database })("fibres insolubles"),
       );
 
     if (columnName === "Ω3 / Ω6")
       return avoidNaN(
         calcColumnTotal({ periods, database })("Oméga-3") /
-          calcColumnTotal({ periods, database })("Oméga-6")
+          calcColumnTotal({ periods, database })("Oméga-6"),
       );
 
     const total = periods
@@ -32,10 +32,12 @@ export const calcColumnTotal =
           const { quantity, text } = parseMealLine(item);
           const dbItem = database.find(
             (dbEntry) =>
-              dbEntry.aliment?.toString().toLowerCase() === text.toLowerCase()
+              dbEntry.aliment?.toString().toLowerCase().trim() ===
+              text.toLowerCase().trim(),
           );
 
-          const itemValue = dbItem !== undefined ? dbItem[columnName] ?? 0 : 0;
+          const itemValue =
+            dbItem !== undefined ? (dbItem[columnName] ?? 0) : 0;
 
           const itemValueFloat = avoidNaN(parseFloat(itemValue.toString()));
 

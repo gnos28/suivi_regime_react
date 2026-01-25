@@ -39,6 +39,19 @@ const suiviColNames = [
 
 export type SuiviColName = (typeof suiviColNames)[number];
 
+const nutrimentGroups: NutrimentsColName[][] = [
+  ["Calories", "Proteines", "Glucides", "Lipides"],
+  ["fibre solubles", "fibres insolubles", "fibre total", "soluble / insoluble"],
+  ["Sodium", "Potassium", "Calcium", "Magnésium", "Fer", "Zinc"],
+  ["Vitamine D", "Vitamine B9", "Vitamine B12", "Vitamine C"],
+  ["Oméga-3", "Oméga-6", "Ω3 / Ω6"],
+] as const;
+
+export const dataGroups: SuiviColName[][] = [
+  ["ballonnements", "selles", "nausées"],
+  ...nutrimentGroups,
+] as const;
+
 const databaseColNames = ["aliment", ...nutrimentsColNames] as const;
 
 export type DatabaseColName = (typeof databaseColNames)[number];
@@ -70,4 +83,5 @@ export const globales = {
   databaseColNames,
   databaseTabName: "DATABASE",
   nutrimentsColNames,
+  nutrimentGroups,
 } as const;
