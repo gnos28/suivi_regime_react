@@ -1,11 +1,11 @@
-$topPosition: 2rem;
+$topPosition: 1rem;
 $maxHeight: calc(100% - 140px - 1rem - $topPosition - 5px);
 
 .autocompletionsContainer {
   position: absolute;
   z-index: 1200;
   //   top: $topPosition;
-  bottom: calc(1rem + 140px + 5px);
+  bottom: calc(1rem + 140px - 5px);
   width: calc(100% - 2rem);
   height: auto;
   max-height: $maxHeight;
