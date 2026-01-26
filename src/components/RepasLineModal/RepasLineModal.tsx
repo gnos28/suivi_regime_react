@@ -17,7 +17,7 @@ type RepasLineModalProps = {
   autoAnalyze?: boolean;
 };
 
-const quantities = [0, 0.25, 0.33, 0.5, 0.66, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
+const quantities = [0.25, 0.33, 0.5, 0.66, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
 
 // Helper function to format the meal line
 const formatMealLine = (quantity: number, text: string) => {
@@ -62,6 +62,12 @@ const RepasLineModal = ({
 
   const handleTabClick = (tab: "habitudes" | "recent" | "suggestions") => {
     setSelectedTab(selectedTab === tab ? null : tab);
+  };
+
+  const setEditedContentAndCloseTab = (content: string) => {
+    setEditedContent(content);
+    setSelectedTab(null);
+    setShowAutocompletion(false);
   };
 
   return (
@@ -110,12 +116,50 @@ const RepasLineModal = ({
           </h2>
         </div>
 
-        {selectedTab !== null ? (
+        <div className={styles.contentSection}>
+          <NutrimentsResume
+            editedContent={editedContent}
+            autoAnalyze={autoAnalyze}
+            quantity={quantity}
+          />
+
+          <div className={styles.quantitySection}>
+            <div className={styles.quantityHeader}>
+              <span className={styles.quantityLabel}>Quantité</span>
+              <span className={styles.quantityValue}>{quantity}</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max={quantities.length - 1}
+              step="1"
+              value={quantities.indexOf(quantity)}
+              onChange={(e) =>
+                setQuantity(quantities[parseInt(e.target.value)])
+              }
+              className={styles.quantitySlider}
+            />
+          </div>
+
+          <div className={styles.editContainer}>
+            <textarea
+              name="editedContent"
+              id="editedContent"
+              value={editedContent}
+              onChange={handleTextareaChange}
+              className={styles.modalInput}
+              rows={3}
+              placeholder="Saisissez votre repas..."
+            />
+          </div>
+        </div>
+
+        {selectedTab !== null && (
           <div className={styles.expandedTabContent}>
             {selectedTab === "habitudes" && (
               <Habitudes
                 dayTimeCol={dayTimeCol}
-                setEditedContent={setEditedContent}
+                setEditedContent={setEditedContentAndCloseTab}
                 editedContent={editedContent}
               />
             )}
@@ -123,54 +167,16 @@ const RepasLineModal = ({
               <Recents
                 dayTimeCol={dayTimeCol}
                 editedContent={editedContent}
-                setEditedContent={setEditedContent}
+                setEditedContent={setEditedContentAndCloseTab}
               />
             )}
             {selectedTab === "suggestions" && (
               <Suggestions
                 dayTimeCol={dayTimeCol}
                 editedContent={editedContent}
-                setEditedContent={setEditedContent}
+                setEditedContent={setEditedContentAndCloseTab}
               />
             )}
-          </div>
-        ) : (
-          <div className={styles.contentSection}>
-            <NutrimentsResume
-              editedContent={editedContent}
-              autoAnalyze={autoAnalyze}
-              quantity={quantity}
-            />
-
-            <div className={styles.quantitySection}>
-              <div className={styles.quantityHeader}>
-                <span className={styles.quantityLabel}>Quantité</span>
-                <span className={styles.quantityValue}>{quantity}</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max={quantities.length - 1}
-                step="1"
-                value={quantities.indexOf(quantity)}
-                onChange={(e) =>
-                  setQuantity(quantities[parseInt(e.target.value)])
-                }
-                className={styles.quantitySlider}
-              />
-            </div>
-
-            <div className={styles.editContainer}>
-              <textarea
-                name="editedContent"
-                id="editedContent"
-                value={editedContent}
-                onChange={handleTextareaChange}
-                className={styles.modalInput}
-                rows={3}
-                placeholder="Saisissez votre repas..."
-              />
-            </div>
           </div>
         )}
 

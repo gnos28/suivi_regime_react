@@ -37,7 +37,7 @@ const Autocompletion = ({
         .map((name) => {
           const includesEditedContentScore = editedContent
             .toLowerCase()
-            .split(/[^a-z]/)
+            .split(/[^a-z0-9]/)
             .filter((str) => str.length > 2)
             .reduce((acc, curr) => {
               const score = name.toLowerCase().includes(curr) ? 100 : 0;
