@@ -43,7 +43,7 @@ const RepasLineModal = ({
   const [quantity, setQuantity] = useState(initialData.quantity);
   const [selectedTab, setSelectedTab] = useState<
     "habitudes" | "recent" | "suggestions" | null
-  >(null);
+  >("habitudes");
 
   const [showAutocompletion, setShowAutocompletion] = useState(false);
 

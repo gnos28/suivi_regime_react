@@ -59,53 +59,11 @@ div.modalContainer {
   // border: 1px solid red;
 }
 
-.suggestionsContainer {
-  position: absolute;
-  top: 55px;
-  width: 91%;
-  height: 88%;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  gap: 0.2rem;
-  border-top: none;
-  overflow-y: scroll;
-  flex-grow: 1;
-  flex-shrink: 1;
-  // height: calc(50% - 1rem);
-  // max-height: calc(50% - 1rem);
-
-  & > div {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    // overflow-y: scroll;
-  }
-  // background-color: lightgreen;
-}
-
-.suggestionItem {
-  border-radius: 4px;
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  color: black;
-  // background-color: #f0f0f0;
-  background: linear-gradient(90deg, #e0e0e0, #fff);
-}
-.suggestionItem:hover {
-  background-color: #d0d0d0;
-}
-
-.selectedSuggestion {
-  font-weight: bold;
-}
-
 .contentSection,
 .expandedTabContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
   flex-grow: 1;
@@ -117,11 +75,60 @@ div.modalContainer {
   // background-color: lightcoral;
   height: calc(70% - 32px - 37.5px - 34px);
   max-height: calc(1000px - 32px - 37.5px - 34px);
+  justify-content: flex-end;
 }
 
 .expandedTabContent {
   margin-top: 4px;
+  // justify-content: flex-start;
+  height: calc(100% - 50px - 16px - 37.5px - 16px - 80px - 1rem);
+  max-height: calc(1000px - 37px);
+  position: absolute;
+  top: 46px;
   // height: 40%;
+  background-color: white;
+  padding-top: 4px;
+
+  .suggestionsContainer {
+    position: absolute;
+    // top: 55px;
+    width: 91%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    gap: 0.2rem;
+    border-top: none;
+    overflow-y: scroll;
+    flex-grow: 1;
+    flex-shrink: 1;
+    // height: calc(50% - 1rem);
+    // max-height: calc(50% - 1rem);
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      // overflow-y: scroll;
+    }
+    // background-color: lightgreen;
+  }
+
+  .suggestionItem {
+    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    color: black;
+    // background-color: #f0f0f0;
+    background: linear-gradient(90deg, #e0e0e0, #fff);
+  }
+  .suggestionItem:hover {
+    background-color: #d0d0d0;
+  }
+
+  .selectedSuggestion {
+    font-weight: bold;
+  }
 }
 
 .quantitySection {
