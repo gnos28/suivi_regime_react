@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./RepasLineModal.module.scss";
 import modalStyles from "../../styles/modal.module.scss";
 import NutrimentsResume from "./NutrimentsResume";
@@ -43,7 +43,7 @@ const RepasLineModal = ({
   const [quantity, setQuantity] = useState(initialData.quantity);
   const [selectedTab, setSelectedTab] = useState<
     "habitudes" | "recent" | "suggestions" | null
-  >("habitudes");
+  >(initialData.text === "" ? "habitudes" : null);
 
   const [showAutocompletion, setShowAutocompletion] = useState(false);
 
