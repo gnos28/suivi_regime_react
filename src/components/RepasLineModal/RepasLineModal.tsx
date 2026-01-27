@@ -57,6 +57,7 @@ const RepasLineModal = ({
 
   const handleAutocompletionClick = (aliment: string) => {
     setEditedContent(aliment);
+    setSelectedTab(null);
     setShowAutocompletion(false);
   };
 
