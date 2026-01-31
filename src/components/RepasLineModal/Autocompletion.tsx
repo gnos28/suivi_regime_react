@@ -8,10 +8,11 @@ type AutocompletionProps = {
   onSelect: (content: string) => void;
 };
 
-const Autocompletion = ({
-  editedContent,
-  onSelect,
-}: AutocompletionProps) => {
+const normalize = (str: string) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+const Autocompletion = ({ editedContent, onSelect }: AutocompletionProps) => {
   const [autocompletion, setAutocompletion] = useState<string[]>([]);
 
   const { databaseExtended } = useSuiviRegime();
@@ -27,23 +28,29 @@ const Autocompletion = ({
         return;
       }
 
+      const splitedEditedContent = normalize(editedContent)
+        .toLowerCase()
+        .split(/[^a-z0-9]/)
+        .filter((str) => str.length > 2);
+
       const distances: { line: string; distance: number }[] = [
         ...new Set(
           databaseExtended
             .map((item) => item.aliment.toString())
-            .filter((name) => name.length > 0 && name !== "-")
+            .filter((name) => name.length > 0 && name !== "-"),
         ),
       ]
         .map((name) => {
-          const includesEditedContentScore = editedContent
-            .toLowerCase()
-            .split(/[^a-z0-9]/)
-            .filter((str) => str.length > 2)
-            .reduce((acc, curr) => {
-              const score = name.toLowerCase().includes(curr) ? 100 : 0;
+          const includesEditedContentScore = splitedEditedContent.reduce(
+            (acc, curr) => {
+              const score = normalize(name).toLowerCase().includes(curr)
+                ? 200
+                : 0;
 
               return acc + score;
-            }, 0);
+            },
+            0,
+          );
 
           return {
             line: name,
@@ -66,11 +73,23 @@ const Autocompletion = ({
 
   return (
     <>
-      <div className={styles.overtopMask} onClick={() => onSelect(editedContent)} />
+      <div
+        className={styles.overtopMask}
+        onClick={() => onSelect(editedContent)}
+      />
       <div className={styles.topMask} onClick={() => onSelect(editedContent)} />
-      <div className={styles.bottomMask} onClick={() => onSelect(editedContent)} />
-      <div className={styles.leftMask} onClick={() => onSelect(editedContent)} />
-      <div className={styles.rightMask} onClick={() => onSelect(editedContent)} />
+      <div
+        className={styles.bottomMask}
+        onClick={() => onSelect(editedContent)}
+      />
+      <div
+        className={styles.leftMask}
+        onClick={() => onSelect(editedContent)}
+      />
+      <div
+        className={styles.rightMask}
+        onClick={() => onSelect(editedContent)}
+      />
       <div className={styles.autocompletionsContainer}>
         <div>
           {autocompletion
