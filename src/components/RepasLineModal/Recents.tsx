@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import styles from "./RepasLineModal.module.scss";
+import { removeBracketsFromText } from "../../utils/textUtils";
 
 type RecentsProps = {
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
@@ -50,6 +51,7 @@ const Recents = ({
             })
             .flat(2)
             .filter((aliment) => aliment.trim() !== "")
+            .map((aliment) => removeBracketsFromText(aliment)),
         ),
       ];
 

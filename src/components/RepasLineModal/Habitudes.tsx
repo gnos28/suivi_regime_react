@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSuiviRegime } from "../../hooks/useSuiviRegime";
 import styles from "./RepasLineModal.module.scss";
+import { extractQuantityFromText, removeBracketsFromText } from "../../utils/textUtils";
 
 type HabitudesProps = {
   dayTimeCol: "matin" | "midi" | "goûter" | "soir";
@@ -25,11 +26,12 @@ const Habitudes = ({
         if (typeof repas === "string") {
           const aliments = repas.split("\n");
           aliments.forEach((aliment) => {
-            const trimmedAliment = aliment.trim();
+            const trimmedAliment = removeBracketsFromText(aliment);
+            const quantity = extractQuantityFromText(aliment);
             if (trimmedAliment.length > 0) {
               if (Object.keys(alimentCount).includes(trimmedAliment) === false)
-                alimentCount[trimmedAliment] = 1;
-              else alimentCount[trimmedAliment] += 1;
+                alimentCount[trimmedAliment] = quantity;
+              else alimentCount[trimmedAliment] += quantity;
             }
           });
         }

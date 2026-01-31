@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./RepasLineModal.module.scss";
 import modalStyles from "../../styles/modal.module.scss";
 import NutrimentsResume from "./NutrimentsResume";

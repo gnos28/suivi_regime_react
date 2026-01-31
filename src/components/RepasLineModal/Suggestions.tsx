@@ -54,7 +54,7 @@ const Suggestions = ({
               return aliments;
             })
             .flat()
-            .map((aliment) => aliment.trim().toLowerCase()),
+            .map((aliment) => removeBracketsFromText(aliment)),
         ),
       ].map((aliment) => {
         databaseExtended.find(

@@ -106,7 +106,7 @@ const NutrimentsResume = ({
                 ].join(" ")}
                 onClick={handleRequestGemini}
               >
-                Demander à Gemini
+                Estimer avec Gemini
                 <img
                   src="/gemini256.webp"
                   alt="gemini"
